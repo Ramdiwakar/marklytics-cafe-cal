@@ -247,8 +247,8 @@ a{color:var(--cyan)}
 .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.2rem,2.5vw,3rem);align-items:stretch;margin-bottom:1.6rem;min-height:min(62vh,44rem)}
 .hero-copy{display:flex;flex-direction:column;justify-content:center;padding:1rem 0}
 .hero-copy h1{font-size:clamp(2.6rem,4.6vw,5.6rem);line-height:1;letter-spacing:-.03em;max-width:14ch}
-.hero-copy h1 .glow{color:transparent;background:linear-gradient(90deg,#fff 0%,#9CC0FF 45%,var(--cyan) 100%);-webkit-background-clip:text;background-clip:text}
-:root[data-theme="light"] .hero-copy h1 .glow{background:linear-gradient(90deg,#121826,#004AB2 60%,#0E97AD)}
+.hero-copy h1 .glow{color:transparent;background-image:linear-gradient(90deg,#fff 0%,#9CC0FF 45%,var(--cyan) 100%);-webkit-background-clip:text;background-clip:text}
+:root[data-theme="light"] .hero-copy h1 .glow{background-image:linear-gradient(90deg,#121826,#004AB2 60%,#0E97AD);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-copy p{color:var(--muted);font-size:clamp(1rem,1.05vw,1.25rem);margin:1.2rem 0 1.8rem;max-width:54ch}
 .hero-card{padding:1.6rem;display:grid;grid-template-columns:minmax(0,1fr);gap:1rem;align-content:center}
 .hero-card .cap{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
@@ -286,6 +286,19 @@ input[type=range]{width:100%;margin:.6rem 0 0;accent-color:var(--blue);height:1.
 .pg-two{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
 .pg-top{display:grid;grid-template-columns:minmax(13rem,.45fr) minmax(0,1.55fr);align-items:center}
 
+/* ---------- CAFE III ---------- */
+.tech-btn{border:1px solid var(--line-strong);background:rgba(4,8,18,.35);color:var(--muted);border-radius:2rem;padding:.3rem .7rem;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;min-width:5.6rem}
+:root[data-theme="light"] .tech-btn{background:#fff}
+.tech-btn.on{color:var(--cyan);border-color:rgba(39,200,224,.5);background:rgba(39,200,224,.08)}
+.tech-btn:hover{border-color:var(--cyan)}
+.tech-pop{position:fixed;z-index:60;width:min(22rem,calc(100vw - 24px));background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:.8rem;box-shadow:0 24px 60px -20px rgba(0,0,0,.8),0 0 0 1px rgba(39,200,224,.15);animation:tin .18s ease}
+.tp-head{display:flex;justify-content:space-between;gap:.6rem;align-items:baseline;padding:.8rem 1rem;border-bottom:1px solid var(--line);font-size:.86rem}
+.tp-list{display:grid;padding:.4rem .5rem;max-height:20rem;overflow-y:auto}
+.tp-list label{display:flex;gap:.6rem;align-items:center;padding:.4rem .5rem;border-radius:.4rem;font-size:.86rem;cursor:pointer}
+.tp-list label:hover{background:var(--blue-tint)}
+.tp-foot{display:flex;justify-content:flex-end;gap:.4rem;padding:.6rem .8rem;border-top:1px solid var(--line)}
+.grid-in:disabled{opacity:.25;cursor:not-allowed}
+.chk:disabled{opacity:.25;cursor:not-allowed}
 /* ---------- misc ---------- */
 .toast-wrap{position:fixed;right:1.3rem;bottom:calc(1.3rem + env(safe-area-inset-bottom,0px));display:grid;gap:.6rem;z-index:100;max-width:min(26rem,calc(100vw - 2.6rem))}
 .toast{background:var(--panel-solid);color:var(--text);border:1px solid var(--line-strong);border-left:3px solid var(--cyan);padding:.75rem 1rem;border-radius:.6rem;font-size:.88rem;box-shadow:var(--shadow);animation:tin .25s ease}
@@ -346,7 +359,7 @@ input[type=range]{width:100%;margin:.6rem 0 0;accent-color:var(--blue);height:1.
       <div class="nav-group">
         <div class="nav-label">Calculators</div>
         <a href="#cafe2" data-nav="cafe2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><rect x="4" y="3" width="16" height="18"/><path d="M8 7h8"/><path d="M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>CAFE II</a>
-        <a href="#cafe3" data-nav="cafe3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><rect x="4" y="3" width="16" height="18"/><path d="M8 7h8"/><path d="M8 12h8M8 16h5"/></svg>CAFE III<span class="soon">Next</span></a>
+        <a href="#cafe3" data-nav="cafe3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><rect x="4" y="3" width="16" height="18"/><path d="M8 7h8"/><path d="M8 12h8M8 16h5"/></svg>CAFE III</a>
       </div>
       <div class="nav-group">
         <div class="nav-label">Data</div>
@@ -481,6 +494,81 @@ function calcCafe2(rows, opts={}){
     lines, scen, count:valid.length, filled:filled.length, invalid: filled.length-valid.length };
 }
 
+// ===== CAFE III engine: final notification S.O. 5346(E), 29 Sep 2026; mirrors INDIA CAFE 3 Calculator.xlsx =====
+const CAFE3 = {
+  years: {
+    'FY 2027-28':{a:0.00158,c:3.9960,rate:2500,start:'1 April 2027',end:'31 March 2028',block:'Block 1 (FY2027-28 to FY2029-30)'},
+    'FY 2028-29':{a:0.00152,c:3.8600,rate:3000,start:'1 April 2028',end:'31 March 2029',block:'Block 1 (FY2027-28 to FY2029-30)'},
+    'FY 2029-30':{a:0.00148,c:3.7585,rate:3500,start:'1 April 2029',end:'31 March 2030',block:'Block 1 (FY2027-28 to FY2029-30)'},
+    'FY 2030-31':{a:0.00139,c:3.5313,rate:4000,start:'1 April 2030',end:'31 March 2031',block:'Block 2 (FY2030-31 to FY2031-32)'},
+    'FY 2031-32':{a:0.00131,c:3.3273,rate:4500,start:'1 April 2031',end:'31 March 2032',block:'Block 2 (FY2030-31 to FY2031-32)'},
+  },
+  b:1229, conv:23.7135,
+  coeff:{Petrol:0.04217, Diesel:0.03776, LPG:0.06150, CNG:0.03647},
+  pe:{Petrol:1, Diesel:1.1168, LPG:0.6857, CNG:1.1563, Electricity:0.1028},
+  sc:{'ICE':1,'BEV':3,'REEV':3,'PHEV':2.5,'Strong HEV (Flex Fuel Ethanol)':2.5,'Strong HEV':1.6,'Flex Fuel Ethanol':1.1},
+  cnf:{e20:0.08, flex:0.223, cngMin:0.05},
+  techG:1.0, techL:0.0422, capG:9.0, capL:0.3795, small:1000,
+  TECH:['Start-Stop System','Tyre Pressure Monitoring System','Regenerative Braking System','6-Speed or Higher Transmission','12V/48V Efficient Alternator','12V/48V Motor-Generator (Micro-Hybrid)','Exterior LED Lighting','Advanced Glass / Glazing','Electric Water Pump','High-Efficiency Air-Conditioning System','Solar-Reflective Paint','PWM-Controlled Radiator Fan'],
+  TECH_SHORT:['Start-stop','TPMS','Regen braking','6+ speed','Eff. alternator','Motor-generator','Exterior LED','Adv. glazing','E-water pump','Hi-eff A/C','Solar paint','PWM fan'],
+};
+const FUELS3 = ['Petrol','Diesel','CNG','LPG','Electricity'];
+const PTS3 = Object.keys(CAFE3.sc);
+const r3 = n => Math.round(n*1000)/1000;
+function normFuel3(v){ const s=String(v??'').trim().toLowerCase(); if(!s) return '';
+  if (/elec|bev|^ev$|battery/.test(s)) return 'Electricity'; if (/cng/.test(s)) return 'CNG'; if (/lpg/.test(s)) return 'LPG';
+  if (/diesel/.test(s)) return 'Diesel'; if (/petrol|gasoline|ethanol|flex/.test(s)) return 'Petrol'; return null; }
+function normPT3(v){ const s=String(v??'').trim().toLowerCase(); if(!s) return '';
+  if (/strong.*flex|shev.*flex|hev.*flex/.test(s)) return 'Strong HEV (Flex Fuel Ethanol)';
+  if (/flex/.test(s)) return 'Flex Fuel Ethanol'; if (/reev|range/.test(s)) return 'REEV'; if (/phev|plug/.test(s)) return 'PHEV';
+  if (/strong|shev|^hev|hybrid/.test(s)) return 'Strong HEV'; if (/^bev|battery|^ev$|electric/.test(s)) return 'BEV';
+  if (/ice|conventional|internal|petrol|diesel|cng|lpg/.test(s)) return 'ICE'; return null; }
+function isBlank3(r){ return !String(r.brand??'').trim() && !String(r.model??'').trim() && r.co2==null && r.kwh==null && r.mass==null && r.vol==null; }
+function techCount(r){ return (r.tech||'').split('').filter(c=>c==='Y').length; }
+function rowIssues3(r){
+  const o=[];
+  if (!r.fuel) o.push('Select a fuel type'); else if (!FUELS3.includes(r.fuel)) o.push('Fuel type not recognised');
+  if (!r.pt) o.push('Select a powertrain'); else if (!(r.pt in CAFE3.sc)) o.push('Powertrain not recognised');
+  if (r.vol==null) o.push('Enter volume'); else if (r.vol<0) o.push('Volume cannot be negative');
+  if (r.mass==null) o.push('Enter unladen mass');
+  if (r.fuel==='Electricity'){ if (r.kwh==null) o.push('Enter electric energy kWh/100km'); }
+  else if (r.fuel && r.co2==null) o.push('Enter pi CO₂ (MIDC)');
+  if ((r.pt==='BEV'||r.pt==='REEV') && r.fuel && r.fuel!=='Electricity') o.push('BEV/REEV lines use Electricity as fuel');
+  return o;
+}
+function cnf3(r, cfg){
+  if (r.pt==='Flex Fuel Ethanol'||r.pt==='Strong HEV (Flex Fuel Ethanol)') return CAFE3.cnf.flex;
+  if (r.fuel==='CNG') return Math.max(CAFE3.cnf.cngMin, (cfg.cbg||0)/100);
+  if (r.fuel==='Diesel') return (cfg.dieselBlend||0)/100;
+  if (r.fuel==='Petrol'){ if (cfg.e20Share!=null) return CAFE3.cnf.e20*cfg.e20Share/100; return r.e20==='Y'? CAFE3.cnf.e20 : 0; }
+  return 0;
+}
+function baseFC3(r){ if (r.fuel==='Electricity') return (r.kwh||0)*CAFE3.pe.Electricity; return (r.co2||0)*CAFE3.coeff[r.fuel]*CAFE3.pe[r.fuel]; }
+function calcCafe3(rows, cfg={}){
+  const Y = CAFE3.years[cfg.year||'FY 2027-28'];
+  const filled = rows.filter(r=>!isBlank3(r));
+  let J=0,L=0,nW=0,A={off:0,nosc:0,nocnf:0,notech:0,none2:0,raw:0}, cnt=0;
+  const lines = rows.map(r=>{
+    if (isBlank3(r)) return {ok:false, blank:true, issues:[]};
+    const iss=rowIssues3(r); if (iss.length) return {ok:false, issues:iss};
+    const v=CAFE3.sc[r.pt], N=r.vol*v, fc=baseFC3(r), cnf=cnf3(r,cfg);
+    const n = cfg.minTech!=null? Math.max(techCount(r), cfg.minTech) : techCount(r);
+    const ciL = Math.min(CAFE3.capL, Math.min(CAFE3.capG, n)*CAFE3.techL);
+    const adj = Math.max(0, fc*(1-cnf)-ciL);
+    J+=r.vol; L+=N; nW+=r.vol*r.mass; cnt++;
+    A.off+=N*adj; A.nosc+=r.vol*adj; A.nocnf+=N*Math.max(0,fc-ciL); A.notech+=N*fc*(1-cnf); A.none2+=N*fc; A.raw+=r.vol*fc;
+    return {ok:true, v, N, fc, cnf, n:Math.min(9,n), ciL, adj, pg:adj*CAFE3.conv};
+  });
+  if (!J||!L) return {empty:true, lines, count:cnt, filled:filled.length};
+  const W=nW/J, PLraw=A.off/L, TLraw=Y.a*(W-CAFE3.b)+Y.c;
+  const PL=r3(PLraw), TL=r3(TLraw), P=PL*CAFE3.conv, T=TL*CAFE3.conv;
+  const complied = PL<=TL, small = J<CAFE3.small;
+  const mk=(name,pl)=>{ const p=r3(pl); return {name, raw:pl, PL:p, P:p*CAFE3.conv, complied:p<=TL, margin:(TL-p)*CAFE3.conv}; };
+  const scen=[ mk('Notified method: supercredits, CNF and technology', PLraw), mk('Without supercredits', A.nosc/J), mk('Without CNF', A.nocnf/L), mk('Without technology derogation', A.notech/L), mk('Without CNF and technology', A.none2/L), mk('Raw fleet: no supercredits, CNF or technology', A.raw/J) ];
+  return { year:cfg.year||'FY 2027-28', Y, J, L, W, PLraw, TLraw, PL, TL, P, T, margin:T-P, credit:(T-P)*J, complied, small,
+    noncomp: complied? 0 : PL-TL, lines, scen, count:cnt, filled:filled.length, invalid:filled.length-cnt, a:Y.a, c:Y.c, rate:Y.rate };
+}
+
 const SAMPLES = [{"id":"hyundai","name":"Hyundai FY2025-26","manufacturer":"Hyundai Motor India","rows":[["Hyundai","Alcazar","","Petrol",134,1435,5032,"NYYY",0],["Hyundai","Alcazar","","Diesel",138,1435,7361,"NYYY",0],["Hyundai","Aura","","Petrol",139,978,34213,"NNNN",0],["Hyundai","Aura","","CNG",92,978,33853,"NNNN",0],["Hyundai","Exter","","Petrol",122,999,33616,"NNNN",0],["Hyundai","Exter","","CNG",75,999,33261,"NNNN",0],["Hyundai","Grand i10 NIOS","","Petrol",140,930,28525,"NNNN",0],["Hyundai","Grand i10 NIOS","","CNG",74,930,28225,"NNNN",0],["Hyundai","i20","","Petrol",119,1190,50596,"NYNN",0],["Hyundai","Verna","","Petrol",121,1160,9925,"NNYY",0],["Hyundai","Tucson","","Petrol",182,1514,114,"NYYY",0],["Hyundai","Tucson","","Diesel",188,1514,336,"NYYY",0],["Hyundai","Creta","","Petrol",132,1240,123811,"NYYY",0],["Hyundai","Creta","","Diesel",130,1240,72446,"NYYY",0],["Hyundai","Creta Electric","","BEV",0,1240,5664,"NYYY",0],["Hyundai","Venue","","Petrol",131,1127,79145,"NNNY",0],["Hyundai","Venue","","Diesel",113,1127,38592,"NNNY",0],["Hyundai","Ioniq","","BEV",0,2160,185,"NNNN",0]]},{"id":"maruti","name":"Maruti Suzuki FY2025-26","manufacturer":"Maruti Suzuki India Limited","rows":[["MarutiSuzuki","Alto K10","Alto K10 - Petrol","Petrol",95,735,54999,"NNNN",0],["MarutiSuzuki","Alto K10","Alto K10 - Cng","CNG",60,735,38741,"NNNN",0],["MarutiSuzuki","Brezza","Brezza - Petrol","Petrol",117,1150,105670,"NNNN",0],["MarutiSuzuki","Brezza","Brezza - Cng","CNG",75,1150,74434,"NNNN",0],["MarutiSuzuki","Celerio","Celerio - Petrol","Petrol",91,810,10564,"NNNN",0],["MarutiSuzuki","Celerio","Celerio - Cng","CNG",59,810,7441,"NNNN",0],["MarutiSuzuki","Dzire","Dzire - Petrol","Petrol",94,920,134434,"NNNN",0],["MarutiSuzuki","Dzire","Dzire - Cng","CNG",60,920,94696,"NNNN",0],["MarutiSuzuki","Eeco","Eeco - Petrol","Petrol",120,940,58039,"NNNN",0],["MarutiSuzuki","Eeco","Eeco - Cng","CNG",76,940,81766,"NNNN",0],["MarutiSuzuki","Ertiga","Ertiga - Petrol","Petrol",116,1180,116683,"NNNN",0],["MarutiSuzuki","Ertiga","Ertiga - Cng","CNG",78,1180,82193,"NNNN",0],["MarutiSuzuki","S-Presso","S-Presso - Petrol","Petrol",96,775,10884,"NNNN",0],["MarutiSuzuki","S-Presso","S-Presso - Cng","CNG",62,775,7667,"NNNN",0],["MarutiSuzuki","Victoris","Victoris - Petrol","Petrol",116,1195,47075,"NNNN",0],["MarutiSuzuki","Victoris","Victoris - Cng","CNG",75,1195,22107,"NNNN",0],["MarutiSuzuki","Victoris","Victoris - SHEV","Strong HEV",83,1195,6408,"NNNN",0],["MarutiSuzuki","Wagon R","Wagon R - Petrol","Petrol",99,850,105687,"NNNN",0],["MarutiSuzuki","Wagon R","Wagon R - Cng","CNG",59,850,74447,"NNNN",0],["MarutiSuzuki","Ciaz","Ciaz - Petrol","Petrol",117,1055,1980,"NNNN",0],["MarutiSuzuki","Baleno","Baleno - Petrol","Petrol",105,955,101243,"NNNN",0],["MarutiSuzuki","Baleno","Baleno - Cng","CNG",66,955,71317,"NNNN",0],["MarutiSuzuki","Fronx","Fronx - Petrol","Petrol",110,1050,127468,"NNNN",0],["MarutiSuzuki","Fronx","Fronx - Cng","CNG",71,1050,44895,"NNNN",0],["MarutiSuzuki","Grand Vitara","Grand Vitara - Petrol","Petrol",107,1185,76553,"NNNN",0],["MarutiSuzuki","Grand Vitara","Grand Vitara - SHEV","Strong HEV",85,1185,10420,"NNNN",0],["MarutiSuzuki","Ignis","Ignis - Petrol","Petrol",114,865,22904,"NNNN",0],["MarutiSuzuki","Invicto","Invicto - SHEV","Strong HEV",102,1685,3247,"NNNN",0],["MarutiSuzuki","Jimny","Jimny - Petrol","Petrol",142,1193,6675,"NNNN",0],["MarutiSuzuki","XL6","XL6 - Petrol","Petrol",115,1220,21802,"NNNN",0],["MarutiSuzuki","XL6","XL6 - Cng","CNG",77,1220,15357,"NNNN",0],["MarutiSuzuki","Swift","Swift - Petrol","Petrol",94,990,108747,"NNNN",0],["MarutiSuzuki","Swift","Swift - Cng","CNG",62,990,76603,"NNNN",0],["MarutiSuzuki","e VITARA","e VITARA - BEV","BEV",0,1785,3652,"NNNN",0]]},{"id":"mahindra","name":"Mahindra FY2025-26","manufacturer":"Mahindra","rows":[["Mahindra","Bolero","Bolero","ICE / other",166,1620,110136,"NNNN",0],["Mahindra","Marazzo","Marazzo","ICE / other",153,1670,381,"NNNN",0],["Mahindra","XUV3XO","XUV3XO - ICE portion","ICE / other",126,1362,103341,"NNNN",0],["Mahindra","Scorpio-N","Scorpio-N","ICE / other",180,1948,178800,"NNNN",0],["Mahindra","Thar","Thar","ICE / other",200,1650,126711,"NNNN",0],["Mahindra","XUV400 EV","XUV400 EV","BEV",0,1578,2400,"NNNN",0],["Mahindra","XUV700","XUV700","ICE / other",160,2040,57986,"NNNN",0],["Mahindra","XUV7XO","XUV7XO","ICE / other",162,2040,29426,"NNNN",0],["Mahindra","BE 6","BE 6","BEV",0,1907,16313,"YNNN",0],["Mahindra","XEV 9e","XEV 9e","BEV",0,2201,27336,"YNNN",0],["Mahindra","XEV 9s","XEV 9s","BEV",0,2150,7405,"YNNN",0]]}];
 /* ================= storage ================= */
 const KEYS = { docs:'mlx.cafe.docs.v1', work:'mlx.cafe.work.v1', scen:'mlx.cafe.scen.v1', theme:'mlx.theme' };
@@ -608,6 +696,17 @@ async function handleFile(file){
   try{
     const buf = await file.arrayBuffer();
     const wb = XLSX.read(buf, {type:'array'});
+    const kind = detectKind(wb) || (route()==='cafe3'? 'c3' : 'c2');
+    if (kind==='c3'){
+      const r3 = parseWorkbook3(wb);
+      if (!r3){ toast('No CAFE III table found in '+file.name+'. Use the CAFE III template headers: Fuel Type, Powertrain, pi CO2 MIDC, Unladen Mass and Volume.', true); return; }
+      const d3 = upsertDoc3({name:file.name.replace(/\.(xlsx|xlsm|xls|csv)$/i,''), source:'Upload', rows:r3.rows, manufacturer:mostCommon(r3.rows.map(r=>r.brand))});
+      loadDocToWork3(d3);
+      const bad3 = r3.rows.filter(r=>rowIssues3(r).length).length;
+      toast(`Loaded ${r3.rows.length} CAFE III lines from sheet "${r3.sheet}".`+(bad3? ` ${bad3} need attention.`:''));
+      if (route()!=='cafe3') location.hash='#cafe3'; else render();
+      return;
+    }
     const res = parseWorkbook(wb);
     if (!res){ toast('No CAFE II table found in '+file.name+'. Use the template headers: Fuel Type, pi CO2, Unladen Mass and Volume.', true); return; }
     const manufacturer = mostCommon(res.rows.map(r=>r.brand));
@@ -835,8 +934,8 @@ function renderHome(v){
     </a>
     <a class="panel tile" href="#cafe3">
       ${ICON.calc.replace('<svg','<svg class="ic"')}
-      <h3>CAFE III <span class="chip">Next phase</span></h3>
-      <p>FY2027-28 to FY2031-32 under the 29 Sep 2026 notification: CNF, 12 technologies and BEE credit buyout.</p>
+      <h3>CAFE III calculator</h3>
+      <p>FY2027-28 to FY2031-32 under the final 29 Sep 2026 notification: petrol-equivalent FC, CNF, 12 technologies and supercredits.</p>
     </a>
   </section>`;
   if (!R.empty) ringSVG($('#homeRing'), R.P, R.T);
@@ -860,6 +959,7 @@ function renderCafe2(v){
       <div class="drop" id="dropZone">Drop an Excel or CSV file here</div>
       <div class="actions">
         <select class="input" id="sampleSel" aria-label="Load a sample fleet"><option value="">Load sample fleet…</option>${SAMPLES.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select>
+        <button class="btn" data-act3="project" title="Copy these lines into the CAFE III calculator">${ICON.calc}Project to CAFE III</button>
         <button class="btn" data-act="saveDoc">${ICON.save}Save to documents</button>
         <button class="btn blue" data-act="export">${ICON.dl}Export results</button>
       </div>
@@ -981,39 +1081,23 @@ function updateResults(){
     <tbody>${R.scen.map(s=>`<tr><td style="color:var(--text);font-weight:400">${s.name}</td><td>${s.sc}</td><td>${s.tech}</td><td class="r num">${fmt(s.P)}</td><td class="r num">${fmt(s.PL)}</td><td class="r num ${s.credit>=0?'pos':'neg'}">${sign(s.credit)}</td><td><span class="status-dot ${s.complied?'ok':'bad'}">${s.complied?'Yes':'No'}</span></td><td class="r num">${fmt(s.penaltyCr,2)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
-/* ================= CAFE III placeholder ================= */
-function renderCafe3(v){
-  v.innerHTML = `<div class="page-head"><div><h1>CAFE III calculator</h1><p>Coming in the next build. It will follow the final Ministry of Power notification S.O. 5346(E) dated 29 September 2026, covering FY2027-28 to FY2031-32.</p></div></div>
-  <div class="two">
-    <div class="panel panel-pad stack" style="gap:12px"><h3>What changes from CAFE II</h3>
-      <p class="muted">Targets are set in petrol-equivalent L/100km with year-specific a and c and b = 1229 kg. Performance becomes Σvi·ni·[FCi × (1 − CNFi) − ci] / Σvi·ni.</p>
-      <p class="muted">Carbon neutrality factors apply: 8% for E20 petrol including SHEV and PHEV, 22.3% for flex fuel, the higher of 5% or notified CBG blend for CNG, and actual biofuel blend for diesel.</p>
-      <p class="muted">Twelve listed technologies earn 1.0 g CO₂/km each, capped at 9.0 g/km. Supercredits are BEV/REEV 3.0×, PHEV and SHEV flex fuel 2.5×, SHEV 1.6×, flex fuel 1.1×.</p>
-    </div>
-    <div class="panel panel-pad"><h3 style="margin-bottom:12px">Year-specific constants</h3>
-      <div class="table-wrap"><table class="cmp"><thead><tr><th>Year</th><th class="r">a</th><th class="r">c</th><th class="r">Buyout ₹ per g/km</th></tr></thead><tbody>
-      ${[['FY 2027-28',0.00158,3.996,2500],['FY 2028-29',0.00152,3.86,3000],['FY 2029-30',0.00148,3.7585,3500],['FY 2030-31',0.00139,3.5313,4000],['FY 2031-32',0.00131,3.3273,4500]].map(r=>`<tr><td>${r[0]}</td><td class="r num">${r[1]}</td><td class="r num">${r[2].toFixed(4)}</td><td class="r num">${r[3].toLocaleString('en-IN')}</td></tr>`).join('')}
-      </tbody></table></div><p class="faint" style="font-size:13px;margin-top:10px">Small-volume manufacturers below 1,000 units a year are exempt from the target but still report.</p></div>
-  </div>`;
-}
-
 /* ================= DOCUMENTS ================= */
 function renderDocs(v){
   const d = state.docs;
   v.innerHTML = `<div class="page-head"><div><h1>Recent documents</h1><p>Uploads and saved calculations, kept privately in this browser.${storageOK?'':' Browser storage is unavailable here, so documents last until you close the page.'}</p></div>
     <div class="actions"><button class="btn primary" data-act="upload">${ICON.up}Upload Excel</button>${d.length?`<button class="btn ghost danger" data-act="clearDocs">Delete all</button>`:''}</div></div>
-  <div class="panel">${d.length? `<div class="table-wrap"><table class="cmp"><thead><tr><th>Document</th><th>Source</th><th class="r">Lines</th><th class="r">Volume</th><th class="r">P g/km</th><th class="r">T g/km</th><th>Compliance</th><th>Updated</th><th></th></tr></thead><tbody>
-    ${d.map(x=>`<tr><td style="color:var(--text)"><b>${esc(x.name)}</b><div class="faint" style="font-weight:400;font-size:12.5px">${esc(x.manufacturer||'')} ${x.type}</div></td><td><span class="chip">${x.source}</span></td>
+  <div class="panel">${d.length? `<div class="table-wrap"><table class="cmp"><thead><tr><th>Document</th><th>Type, source</th><th class="r">Lines</th><th class="r">Volume</th><th class="r">P g/km</th><th class="r">T g/km</th><th>Compliance</th><th>Updated</th><th></th></tr></thead><tbody>
+    ${d.map(x=>`<tr><td style="color:var(--text)"><b>${esc(x.name)}</b><div class="faint" style="font-weight:400;font-size:12.5px">${esc(x.manufacturer||'')}${x.result?.year? ', '+x.result.year:''}</div></td><td><span class="chip">${x.type||'CAFE II'}</span> <span class="chip">${x.source}</span></td>
       <td class="r num">${x.rows.length}</td><td class="r num">${x.result?fint(x.result.J):'–'}</td><td class="r num">${x.result?fmt(x.result.P):'–'}</td><td class="r num">${x.result?fmt(x.result.T):'–'}</td>
       <td>${x.result?`<span class="status-dot ${x.result.complied?'ok':'bad'}">${x.result.complied?'Yes':'No'}</span>`:'–'}</td><td class="faint" style="white-space:nowrap">${fdate(x.updated)}</td>
       <td><div class="row-act"><button class="btn sm" data-act="openDoc" data-id="${x.id}">Open</button><button class="btn sm ghost" data-act="pgDoc" data-id="${x.id}">Playground</button><button class="btn sm ghost danger" data-act="delDoc" data-id="${x.id}">Delete</button></div></td></tr>`).join('')}
     </tbody></table></div>`
-  : `<div class="empty"><h3>No documents yet</h3><p>Upload a filled template, or save your working data from the CAFE II calculator.</p><div class="actions"><button class="btn primary" data-act="upload">${ICON.up}Upload Excel</button><a class="btn" href="#templates">${ICON.dl}Get the template</a></div></div>`}</div>`;
+  : `<div class="empty"><h3>No documents yet</h3><p>Upload a filled template, or save your working data from the CAFE II or CAFE III calculator.</p><div class="actions"><button class="btn primary" data-act="upload">${ICON.up}Upload Excel</button><a class="btn" href="#templates">${ICON.dl}Get the template</a></div></div>`}</div>`;
 }
 
 /* ================= TEMPLATES ================= */
 function renderTemplates(v){
-  v.innerHTML = `<div class="page-head"><div><h1>Templates</h1><p>Fill the template, upload it, and every line lands in the calculator ready to check. Header names are matched loosely, so your existing CAFE II calculator workbooks also load.</p></div></div>
+  v.innerHTML = `<div class="page-head"><div><h1>Templates</h1><p>Fill the template, upload it, and every line lands in the calculator ready to check. Header names are matched loosely, so your existing CAFE II and CAFE III calculator workbooks also load. The upload detects which calculator a file belongs to.</p></div></div>
   <div class="stack">
     <div class="panel">
       <div class="panel-head"><div><h3>CAFE II input template</h3><p>FY2025-26, one sheet for data and one guide sheet.</p></div><button class="btn primary" data-act="template">${ICON.dl}Download template</button></div>
@@ -1022,8 +1106,14 @@ function renderTemplates(v){
         ${TPL_GUIDE.slice(1,12).map(r=>`<div><b>${esc(r[0])}</b><span class="muted">${esc(r[1])}</span><span class="muted">${esc(r[2])}</span></div>`).join('')}
       </div></div>
     </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>CAFE III input template</h3><p>FY2027-28 to FY2031-32, final notification of 29 Sep 2026. Data sheet plus guide sheet.</p></div><button class="btn primary" data-act3="template">${ICON.dl}Download template</button></div>
+      <div class="panel-pad"><div class="code-list">
+        <div><span>Column</span><span>Required</span><span>Allowed values</span></div>
+        ${TPL3_GUIDE.slice(1,12).map(r=>`<div><b>${esc(r[0])}</b><span class="muted">${esc(r[1])}</span><span class="muted">${esc(r[2])}</span></div>`).join('')}
+      </div></div>
+    </div>
     <div class="two">
-      <div class="panel panel-pad"><h3>CAFE III input template <span class="chip">Next phase</span></h3><p class="muted" style="margin-top:8px">Adds separate fuel and powertrain fields, MIDC and WLTP CO₂, E20 eligibility and the 12 technology columns.</p></div>
       <div class="panel panel-pad"><h3>Sample fleets</h3><p class="muted" style="margin:8px 0 14px">FY2025-26 data from your validated Excel calculators. Load one to explore.</p>
         <div class="actions">${SAMPLES.map(s=>`<button class="btn sm" data-sample="${s.id}">${esc(s.name)}</button>`).join('')}</div></div>
     </div>
@@ -1031,30 +1121,50 @@ function renderTemplates(v){
 }
 
 /* ================= PLAYGROUND ================= */
-const pg = { src:'work', base:[], mode:'adjust', adj:{}, share:{}, minTech:0, ov:{} };
-function pgSources(){ return [{id:'work', name:'Current calculator data', rows:state.rows}, ...SAMPLES.map(s=>({id:'s:'+s.id, name:'Sample: '+s.name, rows:sampleRows(s)})), ...state.docs.map(d=>({id:d.id, name:d.name, rows:d.rows}))]; }
+const pg = { src:'work', kind:'c2', base:[], mode:'adjust', adj:{}, share:{}, minTech:0, ov:{}, year:'FY 2027-28', e20:null };
+const GROUPS3 = ['Petrol','Diesel','CNG','LPG','Strong HEV','Strong HEV (Flex Fuel Ethanol)','Flex Fuel Ethanol','PHEV','BEV','REEV'];
+Object.assign(FUEL_COLORS, {'Strong HEV (Flex Fuel Ethanol)':'#B56767','Flex Fuel Ethanol':'#A9C380','PHEV':'#E8223B','REEV':'#7FB069','BEV':'#A9C380','Electricity':'#A9C380'});
+FUEL_COLORS['Flex Fuel Ethanol']='#D9A441';
+const gkey = r => pg.kind==='c3'? (r.pt==='ICE'? r.fuel : r.pt) : r.fuel;
+const gorder = ()=> pg.kind==='c3'? GROUPS3 : FUELS;
+const gname = k => pg.kind==='c3' && ['Petrol','Diesel','CNG','LPG'].includes(k)? k+' ICE' : k;
+function pgCalc(rows, scen){
+  if (pg.kind==='c3') return calcCafe3(rows, {...state3.cfg(), year:pg.year, ...(scen? {minTech: pg.minTech||null, e20Share: pg.e20} : {})});
+  return calcCafe2(rows, scen? {minTech: pg.minTech||null} : {});
+}
+function pgSources(){
+  return [
+    {id:'work', kind:'c2', name:'CAFE II: current calculator data', rows:state.rows},
+    {id:'work3', kind:'c3', name:'CAFE III: current calculator data', rows:state3.rows},
+    ...SAMPLES.map(s=>({id:'s:'+s.id, kind:'c2', name:'CAFE II sample: '+s.name, rows:sampleRows(s)})),
+    ...state.docs.map(d=>({id:d.id, kind:d.type==='CAFE III'?'c3':'c2', name:(d.type||'CAFE II')+': '+d.name, rows:d.rows, cfg:d.cfg}))
+  ];
+}
 function pgLoad(id){
   const s = pgSources().find(x=>x.id===id) || pgSources()[0];
-  pg.src = s.id; pg.base = JSON.parse(JSON.stringify(s.rows)).filter(r=>rowIssues(r).length===0);
-  pg.adj = {}; pg.ov = {}; pg.minTech = 0; pg.share = baseShares();
+  pg.src = s.id; pg.kind = s.kind;
+  const ok = s.kind==='c3'? (r=>rowIssues3(r).length===0) : (r=>rowIssues(r).length===0);
+  pg.base = JSON.parse(JSON.stringify(s.rows)).filter(ok);
+  pg.year = (s.cfg&&s.cfg.year) || (s.id==='work3'? state3.year : pg.year);
+  pg.adj = {}; pg.ov = {}; pg.minTech = 0; pg.e20 = null; pg.share = baseShares();
 }
-function groups(){ const g={}; pg.base.forEach(r=>g[r.fuel]=(g[r.fuel]||0)+r.vol); return g; }
+function groups(){ const g={}; pg.base.forEach(r=>{ const k=gkey(r); g[k]=(g[k]||0)+r.vol; }); return g; }
 function baseShares(){ const g=groups(), t=Object.values(g).reduce((a,b)=>a+b,0)||1, s={}; Object.keys(g).forEach(k=>s[k]=g[k]/t*100); return s; }
 function scenRows(){
   const g = groups(), tot = Object.values(g).reduce((a,b)=>a+b,0);
   return pg.base.map((r,i)=>{
-    let vol = r.vol;
-    if (pg.mode==='adjust') vol = r.vol*(1+(pg.adj[r.fuel]||0)/100);
-    else vol = g[r.fuel]? r.vol*((pg.share[r.fuel]||0)/100*tot)/g[r.fuel] : 0;
+    const k=gkey(r); let vol = r.vol;
+    if (pg.mode==='adjust') vol = r.vol*(1+(pg.adj[k]||0)/100);
+    else vol = g[k]? r.vol*((pg.share[k]||0)/100*tot)/g[k] : 0;
     if (pg.ov[i]!=null) vol = pg.ov[i];
     return {...r, vol: Math.max(0, vol)};
   });
 }
 function renderPlayground(v){
   const q = new URLSearchParams(location.hash.split('?')[1]||'');
-  if (q.get('doc')) pgLoad(q.get('doc')); else if (!pg.base.length || pg.src==='work') pgLoad(pg.src);
+  if (q.get('doc')) pgLoad(q.get('doc')); else if (!pg.base.length || pg.src==='work' || pg.src==='work3') pgLoad(pg.src);
   const srcs = pgSources();
-  v.innerHTML = `<div class="page-head"><div><h1>Playground</h1><p>Shift the powertrain mix and watch performance, target and compliance respond. Your source data is never changed unless you send the scenario to the calculator.</p></div>
+  v.innerHTML = `<div class="page-head"><div><span class="tag">Scenario lab</span><h1 style="margin-top:.35rem">Playground</h1><p>Shift the powertrain mix and watch performance, target and compliance respond. Works with CAFE II and CAFE III data. Your source data is never changed unless you send the scenario to the calculator.</p></div>
     <div class="actions"><select class="input" id="pgSrc" aria-label="Dataset">${srcs.map(s=>`<option value="${s.id}" ${s.id===pg.src?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div></div>
   <div id="pgBody"></div>`;
   $('#pgSrc').addEventListener('change', e=>{ pgLoad(e.target.value); history.replaceState(null,'','#playground'); pgBody(); });
@@ -1062,26 +1172,30 @@ function renderPlayground(v){
 }
 function pgBody(){
   const body = $('#pgBody'); if(!body) return;
-  if (!pg.base.length){ body.innerHTML = `<div class="panel empty"><h3>Nothing to play with yet</h3><p>Choose a sample or document above, or add complete lines in the CAFE II calculator.</p><div class="actions"><a class="btn primary" href="#cafe2">${ICON.calc}Open calculator</a></div></div>`; return; }
-  const g = groups(), fuels = FUELS.filter(f=>g[f]>0), tot = Object.values(g).reduce((a,b)=>a+b,0);
+  if (!pg.base.length){ body.innerHTML = `<div class="panel empty"><h3>Nothing to play with yet</h3><p>Choose a sample or document above, or add complete lines in a calculator.</p><div class="actions"><a class="btn primary" href="#cafe2">${ICON.calc}CAFE II calculator</a><a class="btn" href="#cafe3">${ICON.calc}CAFE III calculator</a></div></div>`; return; }
+  const c3 = pg.kind==='c3', g = groups(), keys = gorder().filter(f=>g[f]>0), tot = Object.values(g).reduce((a,b)=>a+b,0);
+  const hasPetrol = c3 && pg.base.some(r=>r.fuel==='Petrol' && !['Flex Fuel Ethanol','Strong HEV (Flex Fuel Ethanol)'].includes(r.pt));
   body.innerHTML = `<div class="pg">
     <div class="panel panel-pad pg-controls">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h3>Controls</h3><button class="btn sm ghost" data-act="pgReset">Reset</button></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h3>Controls <span class="chip">${c3?'CAFE III':'CAFE II'}</span></h3><button class="btn sm ghost" data-act="pgReset">Reset</button></div>
+      ${c3? `<label class="field" style="margin:.6rem 0"><span>Reporting year</span><select class="input" id="pgYear">${Object.keys(CAFE3.years).map(y=>`<option ${y===pg.year?'selected':''}>${y}</option>`).join('')}</select></label>`:''}
       <div class="seg" role="group" aria-label="Mode" style="margin:8px 0 6px"><button data-mode="adjust" aria-pressed="${pg.mode==='adjust'}">Adjust volumes</button><button data-mode="mix" aria-pressed="${pg.mode==='mix'}">Shift mix</button></div>
-      <p class="faint" style="font-size:12.5px;margin-bottom:6px">${pg.mode==='adjust'? 'Grow or shrink each powertrain. Total volume changes.' : `Total stays at ${fint(tot)} units. Raising one share lowers the others in proportion.`}</p>
-      <div id="sliders">${fuels.map(f=>{
+      <p class="faint" style="font-size:.78rem;margin-bottom:6px">${pg.mode==='adjust'? 'Grow or shrink each powertrain. Total volume changes.' : `Total stays at ${fint(tot)} units. Raising one share lowers the others in proportion.`}</p>
+      <div id="sliders">${keys.map(f=>{
         const val = pg.mode==='adjust'? (pg.adj[f]||0) : (pg.share[f]||0);
-        return `<div class="slider-row"><div class="slider-top"><b><span class="swatch" style="background:${FUEL_COLORS[f]}"></span>${f}</b><span class="val" data-sv="${f}"></span></div>
-          <div class="slider-sub" data-ss="${f}"></div>
-          <input type="range" data-f="${f}" min="${pg.mode==='adjust'?-100:0}" max="${pg.mode==='adjust'?200:100}" step="${pg.mode==='adjust'?1:0.5}" value="${val}" aria-label="${f}"></div>`;}).join('')}
-        <div class="slider-row"><div class="slider-top"><b>Certified technologies</b><span class="val" id="techVal"></span></div><div class="slider-sub">Minimum 0.98 factors on every line, 9 g/km cap</div>
-          <input type="range" id="techIn" min="0" max="4" step="1" value="${pg.minTech}" aria-label="Minimum certified technologies"></div>
+        return `<div class="slider-row"><div class="slider-top"><b><span class="swatch" style="background:${FUEL_COLORS[f]||'#8A8A8A'}"></span>${esc(gname(f))}</b><span class="val" data-sv="${esc(f)}"></span></div>
+          <div class="slider-sub" data-ss="${esc(f)}"></div>
+          <input type="range" data-f="${esc(f)}" min="${pg.mode==='adjust'?-100:0}" max="${pg.mode==='adjust'?200:100}" step="${pg.mode==='adjust'?1:0.5}" value="${val}" aria-label="${esc(gname(f))}"></div>`;}).join('')}
+        <div class="slider-row"><div class="slider-top"><b>Certified technologies</b><span class="val" id="techVal"></span></div><div class="slider-sub">${c3?'Minimum count per line, 1.0 g/km each, 9 g/km cap':'Minimum 0.98 factors on every line, 9 g/km cap'}</div>
+          <input type="range" id="techIn" min="0" max="${c3?9:4}" step="1" value="${pg.minTech}" aria-label="Minimum certified technologies"></div>
+        ${hasPetrol? `<div class="slider-row"><div class="slider-top"><b>E20 share of petrol</b><span class="val" id="e20Val"></span></div><div class="slider-sub">8% CNF on the E20-eligible share. Left end keeps the Y/N entered per line.</div>
+          <input type="range" id="e20In" min="-5" max="100" step="5" value="${pg.e20==null?-5:pg.e20}" aria-label="E20 share of petrol"></div>`:''}
       </div>
       <div class="actions" style="margin-top:14px"><input class="input" id="scName" placeholder="Scenario name" style="flex:1;min-width:120px"><button class="btn blue" data-act="pgSave">${ICON.save}Save</button></div>
-      <button class="btn" data-act="pgApply" style="margin-top:10px;width:100%;justify-content:center">${ICON.calc}Send scenario to calculator</button>
+      <button class="btn" data-act="pgApply" style="margin-top:10px;width:100%;justify-content:center">${ICON.calc}Send scenario to ${c3?'CAFE III':'CAFE II'} calculator</button>
     </div>
     <div class="stack">
-      <div class="panel hud pg-top"><div class="ring-col" id="pgRing"></div><div class="result-main" style="border-right:0"><span class="tag">Scenario status</span><div class="verdict" style="margin-top:.6rem"><span id="pgBadge"></span><span class="verdict-line" id="pgLine"></span></div><div id="pgRuler"></div></div></div>
+      <div class="panel hud pg-top"><div class="ring-col" id="pgRing"></div><div class="result-main" style="border-right:0"><span class="tag">Scenario status${c3?', '+esc(pg.year):''}</span><div class="verdict" style="margin-top:.6rem"><span id="pgBadge"></span><span class="verdict-line" id="pgLine"></span></div><div id="pgRuler"></div></div></div>
       <div class="two pg-two">
         <div class="panel"><div class="panel-head"><h3>Baseline vs scenario</h3></div><div class="table-wrap"><table class="cmp" id="pgCmp"></table></div></div>
         <div class="panel"><div class="panel-head"><div><h3>Powertrain mix</h3><p>Top bar baseline, bottom bar scenario</p></div></div><div class="panel-pad mix" id="pgMix"></div></div>
@@ -1094,59 +1208,66 @@ function pgBody(){
     const f=s.dataset.f, val=+s.value;
     if (pg.mode==='adjust') pg.adj[f]=val;
     else {
-      const others = fuels.filter(x=>x!==f), rest=100-val, so=others.reduce((a,x)=>a+(pg.share[x]||0),0);
+      const others = keys.filter(x=>x!==f), rest=100-val, so=others.reduce((a,x)=>a+(pg.share[x]||0),0);
       pg.share[f]=val; others.forEach(x=> pg.share[x] = so>0? (pg.share[x]||0)*rest/so : rest/others.length);
       others.forEach(x=>{ const el=$(`input[data-f="${CSS.escape(x)}"]`); if(el) el.value=pg.share[x]; });
     }
     pgUpdate();
   }));
   $('#techIn').addEventListener('input', e=>{ pg.minTech=+e.target.value; pgUpdate(); });
+  const e2=$('#e20In'); if (e2) e2.addEventListener('input', e=>{ const v=+e.target.value; pg.e20 = v<0? null : v; pgUpdate(); });
+  const py=$('#pgYear'); if (py) py.addEventListener('change', e=>{ pg.year=e.target.value; pgBody(); });
   pgModelsTable(); pgUpdate(); pgSavedList();
 }
 function pgModelsTable(){
-  const t=$('#pgModels'); if(!t) return;
-  t.innerHTML = `<thead><tr><th>Model</th><th>Fuel</th><th class="r">pi CO₂</th><th class="r">Baseline</th><th class="r">Scenario</th><th class="r">Pin volume</th></tr></thead><tbody>
-    ${pg.base.map((r,i)=>`<tr><td>${esc([r.brand,r.model].filter(Boolean).join(' ')||'Line '+(i+1))}</td><td><span class="swatch" style="background:${FUEL_COLORS[r.fuel]}"></span>${r.fuel}</td><td class="r num">${fmt(r.co2,0)}</td><td class="r num">${fint(r.vol)}</td><td class="r num calc" data-sc="${i}"></td>
-      <td class="r"><input class="grid-in n w-m" type="number" min="0" step="1" data-ov="${i}" value="${pg.ov[i]??''}" placeholder="–" aria-label="Pin volume for ${esc(r.model)}"></td></tr>`).join('')}</tbody>`;
+  const t=$('#pgModels'); if(!t) return; const c3=pg.kind==='c3';
+  t.innerHTML = `<thead><tr><th>Model</th><th>${c3?'Fuel / powertrain':'Fuel'}</th><th class="r">${c3?'pi CO₂ MIDC / kWh':'pi CO₂'}</th><th class="r">Baseline</th><th class="r">Scenario</th><th class="r">Pin volume</th></tr></thead><tbody>
+    ${pg.base.map((r,i)=>{ const k=gkey(r); return `<tr><td>${esc([r.brand,r.model].filter(Boolean).join(' ')||'Line '+(i+1))}</td><td><span class="swatch" style="background:${FUEL_COLORS[k]||'#8A8A8A'}"></span>${esc(c3? r.fuel+' · '+r.pt : r.fuel)}</td><td class="r num">${c3&&r.fuel==='Electricity'? fmt(r.kwh,1)+' kWh' : fmt(r.co2,0)}</td><td class="r num">${fint(r.vol)}</td><td class="r num calc" data-sc="${i}"></td>
+      <td class="r"><input class="grid-in n w-m" type="number" min="0" step="1" data-ov="${i}" value="${pg.ov[i]??''}" placeholder="–" aria-label="Pin volume for ${esc(r.model)}"></td></tr>`; }).join('')}</tbody>`;
   $$('[data-ov]',t).forEach(el=>el.addEventListener('input',()=>{ const n=num(el.value); if(n==null) delete pg.ov[el.dataset.ov]; else pg.ov[el.dataset.ov]=n; pgUpdate(); }));
 }
 function pgUpdate(){
-  const rows = scenRows(), B = calcCafe2(pg.base), S = calcCafe2(rows, {minTech: pg.minTech||null});
-  const g = groups(), fuels = FUELS.filter(f=>g[f]>0), btot = B.J||1;
-  const sg={}; rows.forEach(r=>sg[r.fuel]=(sg[r.fuel]||0)+r.vol); const stot=Object.values(sg).reduce((a,b)=>a+b,0)||1;
-  fuels.forEach(f=>{
+  const c3=pg.kind==='c3', rows = scenRows(), B = pgCalc(pg.base,false), S = pgCalc(rows,true);
+  const g = groups(), keys = gorder().filter(f=>g[f]>0), btot = B.J||1;
+  const sg={}; rows.forEach(r=>{ const k=gkey(r); sg[k]=(sg[k]||0)+r.vol; }); const stot=Object.values(sg).reduce((a,b)=>a+b,0)||1;
+  keys.forEach(f=>{
     const sv=$(`[data-sv="${CSS.escape(f)}"]`), ss=$(`[data-ss="${CSS.escape(f)}"]`);
     if (sv) sv.textContent = pg.mode==='adjust'? `${(pg.adj[f]||0)>0?'+':''}${pg.adj[f]||0}%` : `${(pg.share[f]||0).toFixed(1)}%`;
     if (ss) ss.textContent = `${fint(g[f])} → ${fint(sg[f]||0)} units`;
   });
   $('#techVal').textContent = pg.minTech? `${pg.minTech} per line` : 'As entered';
+  const ev=$('#e20Val'); if (ev) ev.textContent = pg.e20==null? 'As entered' : pg.e20+'%';
   if (S.empty){ $('#pgBadge').innerHTML='<span class="badge idle"><span class="pip"></span>No volume</span>'; $('#pgLine').textContent='Scenario volume is zero.'; return; }
+  const st = R => c3&&R.small? 'Exempt, small volume' : (R.complied?'Yes':'No');
   $('#pgBadge').innerHTML = `<span class="badge ${S.complied?'ok':'bad'}"><span class="pip"></span>Scenario ${S.complied?'complied':'not complied'}</span>`;
   $('#pgLine').textContent = B.complied===S.complied? `Baseline was also ${B.complied?'compliant':'non-compliant'}` : `Baseline was ${B.complied?'compliant':'non-compliant'}`;
   rulerSVG($('#pgRuler'), B.P, S.T, S.P);
   const rk=S.P.toFixed(2)+'|'+S.T.toFixed(2), rb=$('#pgRing'); if (rb && rb.dataset.k!==rk){ clearTimeout(rb._t); rb._t=setTimeout(()=>{ ringSVG(rb, S.P, S.T); rb.dataset.k=rk; }, 120); }
   const row=(k,b,s,d,goodDown,f=fmt)=>{ const dd=s-b, cls = Math.abs(dd)<1e-9? 'faint' : goodDown==null? '' : ((dd<0)===goodDown?'delta-down':'delta-up'); return `<tr><td>${k}</td><td class="r num">${f(b,d)}</td><td class="r num">${f(s,d)}</td><td class="r num ${cls}">${Math.abs(dd)<1e-9?'–':sign(dd,d)}</td></tr>`; };
   $('#pgCmp').innerHTML = `<thead><tr><th></th><th class="r">Baseline</th><th class="r">Scenario</th><th class="r">Change</th></tr></thead><tbody>
-    ${row('Volume',B.J,S.J,0,null,(v)=>fint(v))}${row('Mass W (kg)',B.W,S.W,1,null)}${row('P (g/km)',B.P,S.P,3,true)}${row('T (g/km)',B.T,S.T,3,false)}
-    ${row('Margin',B.margin,S.margin,3,false)}${row('Credit (t/km)',B.credit,S.credit,3,false)}${row('Exposure (₹ cr)',B.penaltyCr,S.penaltyCr,2,true)}
-    <tr><td>Compliance</td><td class="r"><span class="status-dot ${B.complied?'ok':'bad'}">${B.complied?'Yes':'No'}</span></td><td class="r"><span class="status-dot ${S.complied?'ok':'bad'}">${S.complied?'Yes':'No'}</span></td><td></td></tr></tbody>`;
-  $('#pgMix').innerHTML = fuels.map(f=>{ const b=g[f]/btot*100, s=(sg[f]||0)/stot*100; return `<div class="mix-row"><span><span class="swatch" style="background:${FUEL_COLORS[f]}"></span>${f}</span>
-    <div class="mix-bars"><div class="bar"><i style="width:${b}%;background:${FUEL_COLORS[f]};opacity:.4"></i></div><div class="bar"><i style="width:${s}%;background:${FUEL_COLORS[f]}"></i></div></div><span class="r num" style="text-align:right">${s.toFixed(1)}%</span></div>`; }).join('');
+    ${row('Volume',B.J,S.J,0,null,(v)=>fint(v))}${row('Mass W (kg)',B.W,S.W,1,null)}
+    ${c3? row('P (L/100km)',B.PL,S.PL,3,true)+row('T (L/100km)',B.TL,S.TL,3,false) : ''}
+    ${row('P (g/km)',B.P,S.P,3,true)}${row('T (g/km)',B.T,S.T,3,false)}${row('Margin (g/km)',B.margin,S.margin,3,false)}
+    ${c3? row('Credit / debit (g CO₂/km)',B.credit,S.credit,0,false,(v)=>fint(v)) : row('Credit (t/km)',B.credit,S.credit,3,false)+row('Exposure (₹ cr)',B.penaltyCr,S.penaltyCr,2,true)}
+    <tr><td>Compliance</td><td class="r"><span class="status-dot ${B.complied?'ok':'bad'}">${st(B)}</span></td><td class="r"><span class="status-dot ${S.complied?'ok':'bad'}">${st(S)}</span></td><td></td></tr></tbody>`;
+  $('#pgMix').innerHTML = keys.map(f=>{ const b=g[f]/btot*100, s=(sg[f]||0)/stot*100, col=FUEL_COLORS[f]||'#8A8A8A'; return `<div class="mix-row"><span>${esc(gname(f))}</span>
+    <div class="mix-bars"><div class="bar"><i style="width:${b}%;background:${col};opacity:.4"></i></div><div class="bar"><i style="width:${s}%;background:${col}"></i></div></div><span class="r num" style="text-align:right">${s.toFixed(1)}%</span></div>`; }).join('');
   rows.forEach((r,i)=>{ const el=$(`[data-sc="${i}"]`); if(el) el.textContent=fint(r.vol); });
 }
 function pgSavedList(){
   const box=$('#pgSaved'); if(!box) return;
   const list = state.scen;
   box.innerHTML = `<div class="panel-head"><div><h3>Saved scenarios</h3><p>Compare what-ifs side by side. Kept in this browser.</p></div></div>
-    ${list.length? `<div class="table-wrap"><table class="cmp"><thead><tr><th>Scenario</th><th>Dataset</th><th class="r">Volume</th><th class="r">P</th><th class="r">T</th><th class="r">Margin</th><th>Compliance</th><th class="r">Exposure ₹ cr</th><th></th></tr></thead><tbody>
-      ${list.map(s=>`<tr><td style="color:var(--text)"><b>${esc(s.name)}</b><div class="faint" style="font-weight:400;font-size:12px">${esc(s.desc)}</div></td><td class="muted" style="font-weight:400">${esc(s.src)}</td><td class="r num">${fint(s.J)}</td><td class="r num">${fmt(s.P)}</td><td class="r num">${fmt(s.T)}</td><td class="r num ${s.margin>=0?'pos':'neg'}">${sign(s.margin)}</td><td><span class="status-dot ${s.complied?'ok':'bad'}">${s.complied?'Yes':'No'}</span></td><td class="r num">${fmt(s.pen,2)}</td>
+    ${list.length? `<div class="table-wrap"><table class="cmp"><thead><tr><th>Scenario</th><th>Dataset</th><th class="r">Volume</th><th class="r">P g/km</th><th class="r">T g/km</th><th class="r">Margin</th><th>Compliance</th><th></th></tr></thead><tbody>
+      ${list.map(s=>`<tr><td style="color:var(--text)"><b>${esc(s.name)}</b><div class="faint" style="font-weight:400;font-size:.75rem">${esc(s.desc)}</div></td><td class="muted" style="font-weight:400">${esc(s.src)}</td><td class="r num">${fint(s.J)}</td><td class="r num">${fmt(s.P)}</td><td class="r num">${fmt(s.T)}</td><td class="r num ${s.margin>=0?'pos':'neg'}">${sign(s.margin)}</td><td><span class="status-dot ${s.complied?'ok':'bad'}">${s.complied?'Yes':'No'}</span></td>
       <td><button class="btn sm ghost danger" data-act="delScen" data-id="${s.id}">Delete</button></td></tr>`).join('')}</tbody></table></div>`
     : `<div class="empty" style="padding:28px">Saved scenarios appear here for side-by-side comparison.</div>`}`;
 }
 function pgDesc(){
-  const g=groups(), f=FUELS.filter(x=>g[x]>0);
-  const parts = pg.mode==='adjust'? f.filter(x=>pg.adj[x]).map(x=>`${x} ${pg.adj[x]>0?'+':''}${pg.adj[x]}%`) : f.map(x=>`${x} ${(pg.share[x]||0).toFixed(1)}%`);
-  if (pg.minTech) parts.push(`min ${pg.minTech} tech`); const pins=Object.keys(pg.ov).length; if(pins) parts.push(`${pins} pinned`);
+  const g=groups(), f=gorder().filter(x=>g[x]>0);
+  const parts = pg.mode==='adjust'? f.filter(x=>pg.adj[x]).map(x=>`${gname(x)} ${pg.adj[x]>0?'+':''}${pg.adj[x]}%`) : f.map(x=>`${gname(x)} ${(pg.share[x]||0).toFixed(1)}%`);
+  if (pg.kind==='c3') parts.unshift(pg.year);
+  if (pg.minTech) parts.push(`min ${pg.minTech} tech`); if (pg.e20!=null) parts.push(`E20 ${pg.e20}%`); const pins=Object.keys(pg.ov).length; if(pins) parts.push(`${pins} pinned`);
   return parts.join(', ') || 'No changes';
 }
 
@@ -1171,22 +1292,391 @@ document.addEventListener('click', e=>{
       const name = state.docName || (state.manufacturer? state.manufacturer+' CAFE II' : 'CAFE II calculation')+' '+new Date().toLocaleDateString('en-IN');
       const d = upsertDoc({id:state.docId, name, source: state.docId? (state.docs.find(x=>x.id===state.docId)?.source||'Manual') : 'Manual', rows:filledRows(state.rows), manufacturer:state.manufacturer});
       state.docId=d.id; state.docName=d.name; saveWork(); toast('Saved to documents: '+d.name); render(); break; }
-    case 'openDoc': { const d=state.docs.find(x=>x.id===id); if(d){ loadDocToWork(d); location.hash='#cafe2'; } break; }
+    case 'openDoc': { const d=state.docs.find(x=>x.id===id); if(d){ if(d.type==='CAFE III'){ loadDocToWork3(d); location.hash='#cafe3'; } else { loadDocToWork(d); location.hash='#cafe2'; } } break; }
     case 'pgDoc': location.hash='#playground?doc='+id; break;
-    case 'delDoc': arm(()=>{ state.docs=state.docs.filter(x=>x.id!==id); if(state.docId===id){ state.docId=null; state.docName=''; saveWork(); } saveDocs(); toast('Document deleted'); render(); }); break;
+    case 'delDoc': arm(()=>{ state.docs=state.docs.filter(x=>x.id!==id); if(state.docId===id){ state.docId=null; state.docName=''; saveWork(); } if(state3.docId===id){ state3.docId=null; state3.docName=''; saveWork3(); } saveDocs(); toast('Document deleted'); render(); }); break;
     case 'clearDocs': arm(()=>{ state.docs=[]; state.docId=null; state.docName=''; saveWork(); saveDocs(); toast('All documents deleted'); render(); }); break;
-    case 'pgReset': pg.adj={}; pg.ov={}; pg.minTech=0; pg.share=baseShares(); pgBody(); break;
+    case 'pgReset': pg.adj={}; pg.ov={}; pg.minTech=0; pg.e20=null; pg.share=baseShares(); pgBody(); break;
     case 'pgSave': {
-      const S=calcCafe2(scenRows(),{minTech:pg.minTech||null}); if(S.empty) break;
+      const S=pgCalc(scenRows(),true); if(S.empty) break;
       const nm = ($('#scName').value.trim()) || 'Scenario '+(state.scen.length+1);
-      state.scen.unshift({id:uid(), name:nm, desc:pgDesc(), src:(pgSources().find(x=>x.id===pg.src)||{}).name||'', J:S.J, P:S.P, T:S.T, margin:S.margin, complied:S.complied, pen:S.penaltyCr});
+      state.scen.unshift({id:uid(), name:nm, desc:pgDesc(), src:(pgSources().find(x=>x.id===pg.src)||{}).name||'', J:S.J, P:S.P, T:S.T, margin:S.margin, complied:S.complied, pen:S.penaltyCr||0});
       sset(KEYS.scen, state.scen); pgSavedList(); $('#scName').value=''; toast('Scenario saved: '+nm); break; }
     case 'delScen': arm(()=>{ state.scen=state.scen.filter(x=>x.id!==id); sset(KEYS.scen,state.scen); pgSavedList(); }); break;
     case 'pgApply': {
       const rows=scenRows();
+      if (pg.kind==='c3'){
+        if (pg.minTech) rows.forEach(r=>{ const t=(r.tech||'NNNNNNNNNNNN').split(''); let have=t.filter(c=>c==='Y').length; for(let q=0;q<12&&have<pg.minTech;q++){ if(t[q]!=='Y'){ t[q]='Y'; have++; } } r.tech=t.join(''); });
+        state3.rows = padRows3(rows.map(r=>({...r, id:uid(), vol:Math.round(r.vol)}))); state3.docId=null; state3.docName=''; state3.year=pg.year; saveWork3();
+        toast(pg.e20!=null? 'Scenario sent. The E20 share slider is not carried over; set E20 per line.' : 'Scenario sent to CAFE III calculator. Save it to keep it as a document.'); location.hash='#cafe3'; break;
+      }
       if (pg.minTech) rows.forEach(r=>{ const keys=['regen','ss','tpms','six']; let have=keys.filter(k=>r[k]==='Y').length; for(const k of keys){ if(have>=pg.minTech) break; if(r[k]!=='Y'){ r[k]='Y'; have++; } } });
       state.rows = padRows(rows.map(r=>({...r, id:uid(), vol:Math.round(r.vol)}))); state.docId=null; state.docName=''; state.manufacturer = state.manufacturer || mostCommon(rows.map(r=>r.brand));
       saveWork(); toast('Scenario sent to calculator. Save it to keep it as a document.'); location.hash='#cafe2'; break; }
+  }
+});
+
+/* ================= CAFE III state ================= */
+const KEY3 = 'mlx.cafe3.work.v1';
+const blankRow3 = () => ({id:uid(), brand:'', model:'', fuel:'Petrol', pt:'ICE', co2:null, wltp:null, kwh:null, mass:null, vol:null, e20:'N', tech:'NNNNNNNNNNNN'});
+const W3 = sget(KEY3, null);
+const state3 = {
+  rows: (W3?.rows && W3.rows.length)? W3.rows : Array.from({length:10},()=>blankRow3()),
+  manufacturer: W3?.manufacturer||'', docId: W3?.docId||null, docName: W3?.docName||'',
+  year: W3?.year && CAFE3.years[W3.year]? W3.year : 'FY 2027-28', cbg: W3?.cbg ?? 0, dieselBlend: W3?.dieselBlend ?? 0,
+  cfg(){ return {year:this.year, cbg:this.cbg, dieselBlend:this.dieselBlend}; }
+};
+const saveWork3 = debounce(()=> sset(KEY3, {rows:state3.rows, manufacturer:state3.manufacturer, docId:state3.docId, docName:state3.docName, year:state3.year, cbg:state3.cbg, dieselBlend:state3.dieselBlend}), 300);
+function padRows3(rows, n=MIN_ROWS){ while(rows.length<n) rows.push(blankRow3()); return rows; }
+const filled3 = rows => rows.filter(r=>!isBlank3(r));
+function upsertDoc3({name, source, rows, manufacturer, id}){
+  const now=Date.now(); let d = id && state.docs.find(x=>x.id===id);
+  const R = calcCafe3(rows, state3.cfg());
+  const payload = {name, source, manufacturer, type:'CAFE III', cfg:state3.cfg(), rows:JSON.parse(JSON.stringify(rows)), updated:now,
+    result: R.empty? null : {P:R.P, T:R.T, complied:R.complied, J:R.J, margin:R.margin, year:R.year}};
+  if (d) Object.assign(d, payload); else { d={id:uid(), created:now, ...payload}; state.docs.unshift(d); }
+  state.docs.sort((a,b)=>b.updated-a.updated); saveDocs(); return d;
+}
+function loadDocToWork3(d){
+  state3.rows = padRows3(JSON.parse(JSON.stringify(d.rows)).map(r=>({...blankRow3(), ...r, id:r.id||uid()})));
+  state3.manufacturer=d.manufacturer||''; state3.docId=d.id; state3.docName=d.name;
+  if (d.cfg){ if (CAFE3.years[d.cfg.year]) state3.year=d.cfg.year; state3.cbg=d.cfg.cbg??0; state3.dieselBlend=d.cfg.dieselBlend??0; }
+  saveWork3();
+}
+
+/* ================= CAFE III import ================= */
+const TECH_RE = [/start.?stop/, /tpms|tyre|tire/, /regen/, /6\+?\s*-?\s*speed|6.or.higher|six.speed/, /alternator/, /motor.?gen|micro.?hybrid/, /\bled\b|exterior led/, /glass|glazing/, /water pump/, /a\/c|air.?con/, /solar|reflective/, /pwm|radiator fan/];
+const isComputed3 = h => /ni x|x wi|effective|official|before|after|derogation factor|supercredit|cnf|flag|variance|sum|review|count|reduction|override|adjusted|base fc|line p/.test(h);
+function mapHeader3(row){
+  const h = row.map(c=>String(c??'').toLowerCase().replace(/\s+/g,' ').trim());
+  const find = (re, extra)=> h.findIndex(x=> x && re.test(x) && !isComputed3(x) && (!extra || extra(x)));
+  const m = {
+    brand: find(/brand|make|oem|manufacturer/),
+    model: find(/model/, x=>!/line|variant/.test(x)),
+    fuel: find(/fuel/, x=>!/volume|sum|source|powertrain|flex|consumption|fc /.test(x)),
+    pt: find(/powertrain|vehicle type/),
+    co2: (()=>{ const i=find(/midc/); return i>=0? i : find(/co2|co₂|emission/, x=>!/wltp/.test(x)); })(),
+    wltp: find(/wltp/), kwh: find(/kwh|electric energy|energy consumption/),
+    mass: find(/mass|weight|kerb|unladen/), e20: find(/e20/),
+  };
+  let vol = h.findIndex(x=>/ni actual|actual volume/.test(x));
+  if (vol<0) vol = h.findIndex(x=>/source volume used/.test(x));
+  if (vol<0) vol = find(/volume|sales|units|qty|quantity/, x=>!/adj|extra|manual|override|petrol|diesel|cng|bev|shev|monthly|source/.test(x));
+  m.vol = vol;
+  m.tech = TECH_RE.map(re=>find(re));
+  const score = (m.fuel>=0)+(m.co2>=0||m.kwh>=0)+(m.vol>=0)+(m.mass>=0)+(m.model>=0);
+  return {m, score};
+}
+function detectKind(wb){
+  for (const name of wb.SheetNames){
+    const aoa = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, raw:true, defval:''});
+    for (let i=0;i<Math.min(25,aoa.length);i++){ const t=aoa[i].map(c=>String(c??'').toLowerCase()).join('|'); if (/powertrain|kwh|midc|wltp|exterior led|e20 eligible/.test(t)) return 'c3'; }
+  }
+  return null;
+}
+function parseWorkbook3(wb){
+  const order = [...wb.SheetNames].sort((a,b)=>{ const p=n=>/cafe iii input|input/i.test(n)?0:/model calc/i.test(n)?1:2; return p(a)-p(b); });
+  for (const name of order){
+    const aoa = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, raw:true, defval:''});
+    let best=null;
+    for (let i=0;i<Math.min(25,aoa.length);i++){ const r=mapHeader3(aoa[i]); if (r.m.fuel>=0 && r.score>=4 && (!best||r.score>best.score)) best={...r,i}; }
+    if (!best) continue;
+    const {m}=best, rows=[];
+    for (let j=best.i+1;j<aoa.length;j++){
+      const a=aoa[j], g=k=> m[k]>=0? a[m[k]] : '';
+      const brand=String(g('brand')).trim(), model=String(g('model')).trim();
+      if (!brand && !model) continue;
+      if (/^example/i.test(brand) || /total/i.test(brand+' '+model)) continue;
+      const fuelRaw=g('fuel'), ptRaw=g('pt');
+      let fuel = normFuel3(fuelRaw), pt = normPT3(ptRaw);
+      if (/bev|electric/i.test(String(fuelRaw)) && !pt) pt='BEV';
+      if (!pt && fuel) pt = fuel==='Electricity'? 'BEV' : 'ICE';
+      const tech = m.tech.map(ix=> ix>=0 && yn(a[ix])==='Y' ? 'Y':'N').join('');
+      rows.push({id:uid(), brand, model, fuel: fuel===null? String(fuelRaw) : fuel, pt: pt===null? String(ptRaw) : pt,
+        co2:num(g('co2')), wltp:num(g('wltp')), kwh:num(g('kwh')), mass:num(g('mass')), vol:num(g('vol')), e20:yn(g('e20')), tech});
+    }
+    if (rows.length) return {rows, sheet:name};
+  }
+  return null;
+}
+
+/* ================= CAFE III template & export ================= */
+const TPL3_HEAD = ['Brand','Model','Fuel Type','Powertrain','pi CO2 MIDC (g/km)','pi CO2 WLTP (g/km)','Electric Energy (kWh/100km)','Unladen Mass (kg)','Volume (units)','E20 Eligible (Y/N)', ...CAFE3.TECH.map(t=>t+' (Y/N)')];
+const TPL3_GUIDE = [
+  ['Column','Required','Allowed values / notes'],
+  ['Brand','Yes','Manufacturer or brand name'],
+  ['Model','Yes','Model name. Use one row per fuel and powertrain combination'],
+  ['Fuel Type','Yes','Petrol, Diesel, CNG, LPG, Electricity'],
+  ['Powertrain','Yes','ICE, Strong HEV, PHEV, BEV, REEV, Flex Fuel Ethanol, Strong HEV (Flex Fuel Ethanol)'],
+  ['pi CO2 MIDC (g/km)','Yes, except Electricity','Type-approved tailpipe CO2 on MIDC. Compliance is assessed on MIDC'],
+  ['pi CO2 WLTP (g/km)','Report','Declared WLTP CO2. Reported only; the MIDC-to-WLTP target conversion is to be notified separately'],
+  ['Electric Energy (kWh/100km)','Electricity lines','Type-approved energy consumption. Converted with factor 0.1028'],
+  ['Unladen Mass (kg)','Yes','Unladen mass of the model'],
+  ['Volume (units)','Yes','Units manufactured or imported for sale in the reporting year'],
+  ['E20 Eligible (Y/N)','Petrol lines','Y applies the 8% CNF for E20 or higher ethanol-blended petrol, including SHEV and PHEV'],
+  ['Technology columns (12)','No','Y for each Table 1.3 technology deployed. 1.0 g CO2/km each, capped at 9.0 g CO2/km per model'],
+  [],
+  ['Rows whose Brand starts with "EXAMPLE" are ignored on upload.'],
+  ['Source: Ministry of Power notification S.O. 5346(E), 29 September 2026.'],
+];
+function downloadTemplate3(){
+  if (typeof XLSX==='undefined'){ toast('The Excel library did not load. Reload the page and try again.', true); return; }
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet([TPL3_HEAD, ['EXAMPLE – delete this row','Creta','Petrol','ICE',132,138,'',1240,25000,'Y','Y','Y','N','Y','N','N','Y','N','N','N','N','N']]);
+  ws['!cols']=TPL3_HEAD.map(h=>({wch:Math.max(12,Math.min(30,h.length+2))}));
+  XLSX.utils.book_append_sheet(wb, ws, 'CAFE III Input');
+  const g=XLSX.utils.aoa_to_sheet(TPL3_GUIDE); g['!cols']=[{wch:30},{wch:22},{wch:96}];
+  XLSX.utils.book_append_sheet(wb, g, 'Guide');
+  saveFile('Marklytics_CAFE_III_Template.xlsx', wbBlob(wb));
+}
+function exportResults3(){
+  const R=calcCafe3(state3.rows, state3.cfg()); if (R.empty){ toast('Add at least one complete line before exporting.', true); return; }
+  const wb=XLSX.utils.book_new(), mf=state3.manufacturer||'Manufacturer';
+  const sum=[
+    ['Marklytics CAFE III compliance estimate, '+R.year],[],
+    ['Manufacturer',mf],['Reporting year',R.year],['Compliance block',R.Y.block],[],
+    ['a (L/100km per kg)',R.a],['b (kg)',CAFE3.b],['c (L/100km)',R.c],[],
+    ['Total volume Σni',R.J],['Effective volume Σvi·ni',R.L],['Weighted average unladen mass W (kg)',+R.W.toFixed(3)],[],
+    ['Annual Average of Actual Fuel Consumption P (L/100km, 3 dp)',R.PL],['P (g CO2/km) = P × 23.7135',+R.P.toFixed(3)],
+    ['Annual Average Fuel Consumption Standard T (L/100km, 3 dp)',R.TL],['T (g CO2/km) = T × 23.7135',+R.T.toFixed(3)],
+    ['Credit (+) / Debit (−) = (T − P) × Σni (g CO2/km)',Math.round(R.credit)],
+    ['Compliance (P ≤ T)', R.small? 'Small-volume manufacturer: exempt from target, must report' : (R.complied?'Yes':'No')],
+    ['Non-compliance (L/100km), para 7(c) formula applied to this year', R.complied? 0 : +R.noncomp.toFixed(3)],[],
+    ['BEE credit buyout price notified for '+R.year+' (INR per g CO2/km)', R.rate],
+    ['CBG blending % used for CNG CNF', state3.cbg],['Diesel biofuel blending % used for diesel CNF', state3.dieselBlend],[],
+    ['Source: Ministry of Power S.O. 5346(E), 29 Sep 2026. Penalties follow sections 26 to 28 of the Energy Conservation Act, assessed at the end of the compliance block; no fixed amount is set in the notification.']
+  ];
+  const s1=XLSX.utils.aoa_to_sheet(sum); s1['!cols']=[{wch:66},{wch:34}]; XLSX.utils.book_append_sheet(wb,s1,'Summary');
+  const head=[...TPL3_HEAD,'vi','CNF','FC petrol eq. (L/100km)','ci (L/100km)','Adjusted FC (L/100km)','Status'], lines=[head];
+  state3.rows.forEach((r,i)=>{ const l=R.lines[i]; if(l.blank) return; const t=(r.tech||'').padEnd(12,'N');
+    lines.push([r.brand,r.model,r.fuel,r.pt,r.co2,r.wltp,r.kwh,r.mass,r.vol,r.e20,...t.split(''), l.ok?l.v:'', l.ok?l.cnf:'', l.ok?+l.fc.toFixed(4):'', l.ok?+l.ciL.toFixed(4):'', l.ok?+l.adj.toFixed(4):'', l.ok?'OK':l.issues.join('; ')]); });
+  const s2=XLSX.utils.aoa_to_sheet(lines); s2['!cols']=head.map(h=>({wch:Math.max(9,Math.min(26,String(h).length+2))})); XLSX.utils.book_append_sheet(wb,s2,'Model lines');
+  const sc=[['Scenario','P (L/100km)','P (g/km)','T (L/100km)','Margin (g/km)','Compliance']];
+  R.scen.forEach(s=>sc.push([s.name,s.PL,+s.P.toFixed(3),R.TL,+s.margin.toFixed(3),s.complied?'Yes':'No']));
+  const s3=XLSX.utils.aoa_to_sheet(sc); s3['!cols']=[{wch:50},{wch:12},{wch:10},{wch:12},{wch:14},{wch:12}]; XLSX.utils.book_append_sheet(wb,s3,'Scenarios');
+  saveFile(`CAFE_III_${R.year.replace(/\W+/g,'')}_${mf.replace(/[^\w]+/g,'_')}_results.xlsx`, wbBlob(wb));
+}
+
+/* ================= CAFE II → CAFE III projection ================= */
+function projectFromCafe2(rows2, manufacturer){
+  const src = filledRows(rows2); if (!src.length){ toast('The CAFE II calculator has no filled lines to project.', true); return false; }
+  let other=0, ice=0;
+  const map = {'Petrol':['Petrol','ICE'],'Diesel':['Diesel','ICE'],'CNG':['CNG','ICE'],'LPG':['LPG','ICE'],'ICE / Other':['Petrol','ICE'],'Strong HEV':['Petrol','Strong HEV'],'PHEV/REEV':['Petrol','PHEV'],'BEV':['Electricity','BEV']};
+  state3.rows = padRows3(src.map(r=>{ const [fuel,pt]=map[r.fuel]||['Petrol','ICE']; if (r.fuel==='ICE / Other') ice++; if (r.other) other++;
+    const t='NNNNNNNNNNNN'.split(''); if(r.ss==='Y') t[0]='Y'; if(r.tpms==='Y') t[1]='Y'; if(r.regen==='Y') t[2]='Y'; if(r.six==='Y') t[3]='Y';
+    return {...blankRow3(), brand:r.brand, model:r.model, fuel, pt, co2: fuel==='Electricity'? null : r.co2, kwh:null, mass:r.mass, vol:r.vol, tech:t.join('')}; }));
+  state3.manufacturer = manufacturer||state3.manufacturer; state3.docId=null; state3.docName=''; saveWork3();
+  const notes=['Projected '+src.length+' lines to CAFE III.'];
+  const bev=src.filter(r=>r.fuel==='BEV').length; if (bev) notes.push(`Enter kWh/100km for ${bev} BEV line${bev>1?'s':''}.`);
+  if (ice) notes.push(`${ice} "ICE / Other" line${ice>1?'s were':' was'} set to Petrol; check fuel.`);
+  if (other) notes.push('"Other certified reduction" values do not carry over.');
+  notes.push('Set E20 eligibility per line.');
+  toast(notes.join(' '));
+  return true;
+}
+
+/* ================= CAFE III page ================= */
+function renderCafe3(v){
+  padRows3(state3.rows);
+  const Y = CAFE3.years[state3.year];
+  v.innerHTML = `
+  <div class="page-head">
+    <div><span class="tag">Calculator, FY2027-28 to FY2031-32</span><h1 style="margin-top:.35rem">CAFE III compliance</h1><p>Final notification S.O. 5346(E), 29 September 2026. Petrol-equivalent fuel consumption on MIDC with supercredits, carbon neutrality factors and technology derogation.</p></div>
+    <div class="actions">
+      <button class="btn" data-act3="template">${ICON.dl}Download template</button>
+      <button class="btn primary" data-act="upload">${ICON.up}Upload Excel</button>
+    </div>
+  </div>
+  <div class="stack">
+    <div class="panel doc-bar">
+      <label class="field"><span>Manufacturer</span><input class="input" id="mf3" value="${esc(state3.manufacturer)}" placeholder="e.g. Hyundai Motor India" style="min-width:13rem"></label>
+      <label class="field"><span>Reporting year</span><select class="input" id="yr3">${Object.keys(CAFE3.years).map(y=>`<option ${y===state3.year?'selected':''}>${y}</option>`).join('')}</select></label>
+      <label class="field"><span>CBG blend %</span><input class="input" id="cbg3" type="number" min="0" max="100" step="0.1" value="${state3.cbg}" style="width:6.5rem" title="Notified by MoPNG. CNG CNF uses the higher of 5% or this value"></label>
+      <label class="field"><span>Diesel biofuel %</span><input class="input" id="dbl3" type="number" min="0" max="100" step="0.1" value="${state3.dieselBlend}" style="width:6.5rem" title="Actual biofuel blending specified by MoPNG"></label>
+      <div class="field"><span>Document</span><span style="padding:.5rem 0;min-width:8rem">${state3.docName? esc(state3.docName) : '<span class="faint">Not saved yet</span>'}</span></div>
+      <div class="drop" id="dropZone3">Drop an Excel or CSV file here</div>
+      <div class="actions">
+        <button class="btn" data-act3="import2" title="Copy the CAFE II calculator lines into CAFE III">${ICON.calc}Import CAFE II data</button>
+        <button class="btn" data-act3="save">${ICON.save}Save to documents</button>
+        <button class="btn blue" data-act3="export">${ICON.dl}Export results</button>
+      </div>
+    </div>
+    <div class="panel hud result" id="resultBox3"></div>
+    <div class="panel" id="tableBox3"></div>
+    <div class="panel" id="scenBox3"></div>
+    <div class="panel">
+      <details class="notes"><summary>Regulatory constants and sources</summary>
+        <div class="body">
+          <div class="table-wrap"><table class="cmp"><thead><tr><th>Year</th><th class="r">a</th><th class="r">b kg</th><th class="r">c</th><th class="r">Buyout price ₹ per g CO₂/km</th><th>Block</th></tr></thead><tbody>
+            ${Object.entries(CAFE3.years).map(([y,o])=>`<tr><td>${y}</td><td class="r num">${o.a}</td><td class="r num">1229</td><td class="r num">${o.c.toFixed(4)}</td><td class="r num">${o.rate.toLocaleString('en-IN')}</td><td class="muted" style="font-weight:400">${o.block}</td></tr>`).join('')}
+          </tbody></table></div>
+          <div class="kv">
+            <div><span>Petrol FC</span><b>0.04217 × CO₂</b></div><div><span>Diesel FC</span><b>0.03776 × CO₂ × 1.1168</b></div>
+            <div><span>LPG FC</span><b>0.06150 × CO₂ × 0.6857</b></div><div><span>CNG FC</span><b>0.03647 × CO₂ × 1.1563</b></div>
+            <div><span>Electricity FC</span><b>kWh/100km × 0.1028</b></div><div><span>CO₂ conversion</span><b>23.7135</b></div>
+            <div><span>CNF E20 petrol, SHEV, PHEV</span><b>8%</b></div><div><span>CNF flex fuel</span><b>22.3%</b></div>
+            <div><span>CNF CNG</span><b>max(5%, CBG blend)</b></div><div><span>CNF diesel</span><b>actual biofuel blend</b></div>
+            <div><span>BEV / REEV</span><b>3.0×</b></div><div><span>PHEV, SHEV flex fuel</span><b>2.5×</b></div>
+            <div><span>Strong HEV</span><b>1.6×</b></div><div><span>Flex fuel ethanol</span><b>1.1×</b></div>
+            <div><span>Per technology</span><b>1.0 g/km, 0.0422 L/100km</b></div><div><span>Technology cap</span><b>9.0 g/km, 0.3795 L/100km</b></div>
+            <div><span>Small-volume threshold</span><b>below 1,000 units</b></div><div><span>Rounding</span><b>P and T to 3 decimals</b></div>
+          </div>
+          <p>T = a × (W − b) + c in petrol-equivalent L/100km. P = Σvi·ni·[FCi × (1 − CNFi) − ci] ÷ Σvi·ni. Credit = (T − P) × Σni and Debit = (P − T) × Σni, in g CO₂/km. Non-compliance at block end = total debit ÷ (total block sales × 23.7135) L/100km.</p>
+          <p>Penalties follow sections 26 to 28 of the Energy Conservation Act and are assessed at the end of the compliance block after credit settlement. The notification sets no fixed penalty amount, so none is shown. The buyout price is shown as notified; the notification does not state how it is applied to a debit, so no buyout cost is calculated.</p>
+          <p>Source: Ministry of Power notification S.O. 5346(E), New Delhi, 29 September 2026, for M1 vehicles from 1 April 2027 to 31 March 2032. WLTP CO₂ is captured for reporting under para 2(7); the MIDC-to-WLTP target conversion will be notified separately.</p>
+        </div>
+      </details>
+    </div>
+  </div>`;
+  $('#mf3').addEventListener('input', e=>{ state3.manufacturer=e.target.value; saveWork3(); });
+  $('#yr3').addEventListener('change', e=>{ state3.year=e.target.value; saveWork3(); $('#normTag').textContent='CAFE III norms, '+state3.year; updateResults3(); });
+  $('#cbg3').addEventListener('input', e=>{ state3.cbg=num(e.target.value)||0; saveWork3(); updateResults3(); });
+  $('#dbl3').addEventListener('input', e=>{ state3.dieselBlend=num(e.target.value)||0; saveWork3(); updateResults3(); });
+  $('#normTag').textContent='CAFE III norms, '+state3.year;
+  const dz=$('#dropZone3');
+  ['dragenter','dragover'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault(); dz.classList.add('on');}));
+  ['dragleave','drop'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault(); dz.classList.remove('on');}));
+  dz.addEventListener('drop', e=> handleFile(e.dataTransfer.files[0]));
+  renderTable3(); updateResults3();
+}
+function cell3(i,k,type,cls='',ph=''){ const r=state3.rows[i]; const val=r[k]==null?'':r[k]; return `<input class="grid-in ${type==='number'?'n':''} ${cls}" data-i3="${i}" data-k="${k}" type="${type}" ${type==='number'?'step="any" inputmode="decimal"':''} value="${esc(val)}" placeholder="${ph}" aria-label="${k} row ${i+1}">`; }
+function opts(list, cur){ return (list.includes(cur)||!cur?'':`<option selected>${esc(cur)}</option>`) + list.map(x=>`<option ${x===cur?'selected':''}>${x}</option>`).join(''); }
+function renderTable3(){
+  const box=$('#tableBox3'); if(!box) return;
+  box.innerHTML = `
+    <div class="panel-head"><div><h3>Model lines</h3><p>One row per model, fuel and powertrain. Empty rows are ignored. Edits recalculate instantly.</p></div>
+      <div class="actions">
+        <span class="fill-meter"><span id="fillTxt3"></span><span class="track"><i id="fillBar3"></i></span></span>
+        <div class="addbar"><label for="addN3" style="font-size:.82rem;color:var(--muted)">Add</label><input class="input" id="addN3" type="number" min="1" max="500" value="10"><button class="btn" data-act3="addRows">${ICON.plus}Rows</button></div>
+        <button class="btn ghost" data-act3="trim">Remove empty</button>
+        <button class="btn ghost danger" data-act3="clear">Clear all</button>
+      </div></div>
+    <div id="issueBar3"></div>
+    <div class="table-wrap" style="max-height:min(70vh,52rem);overflow-y:auto"><table>
+      <thead><tr><th>#</th><th>Brand</th><th>Model</th><th>Fuel</th><th>Powertrain</th><th class="r">CO₂ MIDC</th><th class="r">CO₂ WLTP</th><th class="r">kWh/100km</th><th class="r">Mass kg</th><th class="r">Volume</th>
+      <th class="c">E20</th><th class="c">Technologies</th><th class="r">vi</th><th class="r">CNF</th><th class="r">FC L/100km</th><th class="r">Adjusted FC</th><th></th></tr></thead>
+      <tbody>${state3.rows.map((r,i)=>`
+        <tr data-row3="${i}">
+          <td class="faint num flag">${String(i+1).padStart(2,'0')}</td>
+          <td>${cell3(i,'brand','text','w-m','Brand')}</td><td>${cell3(i,'model','text','w-m','Model')}</td>
+          <td><select class="grid-in" style="min-width:6.4rem" data-i3="${i}" data-k="fuel" aria-label="Fuel row ${i+1}">${opts(FUELS3, r.fuel)}</select></td>
+          <td><select class="grid-in" style="min-width:8.6rem" data-i3="${i}" data-k="pt" aria-label="Powertrain row ${i+1}">${opts(PTS3, r.pt)}</select></td>
+          <td>${cell3(i,'co2','number','w-s','0')}</td><td>${cell3(i,'wltp','number','w-s','–')}</td><td>${cell3(i,'kwh','number','w-s','–')}</td>
+          <td>${cell3(i,'mass','number','w-s','0')}</td><td>${cell3(i,'vol','number','w-m','0')}</td>
+          <td class="c"><input type="checkbox" class="chk" data-i3="${i}" data-k="e20" ${r.e20==='Y'?'checked':''} aria-label="E20 eligible row ${i+1}"></td>
+          <td class="c"><button class="tech-btn" data-tech="${i}" aria-haspopup="dialog" aria-label="Technologies row ${i+1}"></button></td>
+          <td class="calc" data-o="v"></td><td class="calc" data-o="cnf"></td><td class="calc" data-o="fc"></td><td class="calc" data-o="adj"></td>
+          <td><div class="row-act"><button class="icon-btn" data-act3="dup" data-i="${i}" aria-label="Duplicate row ${i+1}" title="Duplicate">${ICON.copy}</button><button class="icon-btn del" data-act3="del" data-i="${i}" aria-label="Delete row ${i+1}" title="Delete">${ICON.del}</button></div></td>
+        </tr>`).join('')}</tbody></table></div>`;
+  box.querySelectorAll('[data-i3][data-k]').forEach(el=>{
+    el.addEventListener(el.type==='checkbox'||el.tagName==='SELECT'?'change':'input', ()=>{
+      const r=state3.rows[+el.dataset.i3], k=el.dataset.k;
+      if (el.type==='checkbox') r[k]=el.checked?'Y':'N'; else if (el.type==='number') r[k]=num(el.value); else r[k]=el.value;
+      if (k==='fuel' && el.value==='Electricity' && (r.pt==='ICE'||!r.pt)){ r.pt='BEV'; const s=el.closest('tr').querySelector('[data-k=pt]'); if(s) s.value='BEV'; }
+      if (k==='pt' && (el.value==='BEV'||el.value==='REEV') && r.fuel!=='Electricity'){ r.fuel='Electricity'; const s=el.closest('tr').querySelector('[data-k=fuel]'); if(s) s.value='Electricity'; }
+      saveWork3(); updateResults3();
+    });
+  });
+}
+function updateResults3(){
+  const R = calcCafe3(state3.rows, state3.cfg());
+  $$('#tableBox3 tr[data-row3]').forEach(tr=>{
+    const i=+tr.dataset.row3, l=R.lines[i], r=state3.rows[i]; if(!l) return;
+    tr.classList.toggle('bad', !l.ok && !l.blank); tr.classList.toggle('blank', !!l.blank); tr.title=(l.ok||l.blank)?'':l.issues.join(' · ');
+    $('[data-o=v]',tr).textContent = l.ok? l.v.toFixed(1)+'×' : '–';
+    $('[data-o=cnf]',tr).textContent = l.ok? (l.cnf*100).toFixed(1)+'%' : '–';
+    $('[data-o=fc]',tr).textContent = l.ok? l.fc.toFixed(3) : '–';
+    $('[data-o=adj]',tr).textContent = l.ok? l.adj.toFixed(3) : '–';
+    const elec = r.fuel==='Electricity';
+    const co2=$('[data-k=co2]',tr), kwh=$('[data-k=kwh]',tr), e20=$('[data-k=e20]',tr);
+    co2.disabled = elec; kwh.disabled = !elec; e20.disabled = r.fuel!=='Petrol' || /Flex/.test(r.pt||'');
+    const n=techCount(r), tb=$('.tech-btn',tr); tb.textContent = n? `${n} of 12` : 'None'; tb.classList.toggle('on', n>0);
+  });
+  const ft=$('#fillTxt3'), fb=$('#fillBar3');
+  if (ft){ ft.textContent=`${R.filled} of ${state3.rows.length} rows filled`; fb.style.width=(state3.rows.length? R.filled/state3.rows.length*100:0)+'%'; }
+  const bad=R.lines.filter(l=>!l.ok&&!l.blank).length, ib=$('#issueBar3');
+  if (ib) ib.innerHTML = bad? `<div class="issues">${bad} line${bad>1?'s are':' is'} incomplete and left out of the result. Hover a red row to see what is missing.</div>` : '';
+  const box=$('#resultBox3'); if(!box) return;
+  if (R.empty){ box.innerHTML=`<div class="result-main" style="grid-column:1/-1;min-height:12rem;justify-content:center"><div class="verdict"><span class="badge idle"><span class="pip"></span>Waiting for data</span></div><p class="muted" style="margin-top:.8rem;max-width:64ch">Results appear once a line has fuel, powertrain, MIDC CO₂ (or kWh/100km for electricity), mass and volume. Fill the rows below, upload an Excel file, or import your CAFE II data.</p></div>`; $('#scenBox3').innerHTML=''; return; }
+  if (!$('#rmain3')){
+    box.innerHTML = `<div class="ring-col" id="ringBox3"></div>
+    <div class="result-main" id="rmain3"><span class="tag" id="tag3"></span><div class="verdict" style="margin-top:.6rem"><span id="verdict3"></span></div><p class="verdict-line" id="vline3" style="margin-top:.6rem"></p><div id="ruler3"></div></div>
+    <div class="metrics">
+      <div class="metric"><i class="flow"></i><div class="k">P, actual FC</div><div class="v"><span id="m3PL"></span><span class="u">L/100km</span></div><div class="s"><span id="m3P"></span> g CO₂/km</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">T, standard</div><div class="v"><span id="m3TL"></span><span class="u">L/100km</span></div><div class="s"><span id="m3T"></span> g CO₂/km</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Margin T − P</div><div class="v" id="m3M"></div><div class="s" id="m3ML"></div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Credit / debit</div><div class="v" id="m3C"></div><div class="s">g CO₂/km, (T − P) × Σni</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Weighted mass W</div><div class="v"><span id="m3W"></span><span class="u">kg</span></div><div class="s">b = 1229 kg</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Volume Σni</div><div class="v" id="m3J"></div><div class="s">Effective <span id="m3L"></span></div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Buyout price</div><div class="v"><span id="m3R"></span><span class="u">₹ per g/km</span></div><div class="s">As notified, para 4(2)</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Non-compliance</div><div class="v"><span id="m3N"></span><span class="u">L/100km</span></div><div class="s">Para 7(c), assessed at block end</div></div>
+    </div>`;
+  }
+  const key=R.P.toFixed(3)+'|'+R.T.toFixed(3); if (box.dataset.k!==key){ ringSVG($('#ringBox3'), R.P, R.T); box.dataset.k=key; }
+  $('#tag3').textContent = `Compliance status, ${R.year}`;
+  $('#verdict3').innerHTML = R.small? `<span class="badge idle" style="font-size:1.15rem;padding:.6rem 1.2rem .6rem 1rem"><span class="pip"></span>Exempt, small volume</span>`
+    : `<span class="badge ${R.complied?'ok':'bad'}" style="font-size:1.15rem;padding:.6rem 1.2rem .6rem 1rem"><span class="pip"></span>${R.complied?'Complied':'Not complied'}</span>`;
+  $('#vline3').textContent = R.small? `Below 1,000 units, so exempt from the target. Annual average actual fuel consumption must still be reported. P is ${R.complied?'within':'above'} the standard.`
+    : R.complied? `Actual fuel consumption is ${fmt(R.TL-R.PL)} L/100km (${fmt(R.margin)} g/km) below the standard.` : `Actual fuel consumption exceeds the standard by ${fmt(R.PL-R.TL)} L/100km (${fmt(-R.margin)} g/km).`;
+  rulerSVG($('#ruler3'), R.P, R.T);
+  tween($('#m3PL'),R.PL,3); tween($('#m3TL'),R.TL,3); tween($('#m3W'),R.W,1);
+  $('#m3P').textContent=fmt(R.P); $('#m3T').textContent=fmt(R.T);
+  $('#m3M').innerHTML=`<span class="${R.margin>=0?'pos':'neg'}">${sign(R.margin)}</span><span class="u">g/km</span>`; $('#m3ML').textContent=`${sign(R.TL-R.PL)} L/100km`;
+  $('#m3C').innerHTML=`<span class="${R.credit>=0?'pos':'neg'}">${R.credit>=0?'+':'−'}${fint(Math.abs(R.credit))}</span>`;
+  $('#m3J').textContent=fint(R.J); $('#m3L').textContent=fint(R.L);
+  $('#m3R').textContent=R.rate.toLocaleString('en-IN'); $('#m3N').textContent=fmt(R.noncomp);
+  const mx=Math.max(R.P,R.T), w=[R.P/mx, R.T/mx, Math.min(1,Math.abs(R.margin)/(R.T*.1)), 1, R.W/2500, R.L/Math.max(R.J,R.L), R.rate/4500, R.complied? .04 : Math.min(1,R.noncomp/0.5)];
+  $$('#resultBox3 .metric .flow').forEach((f,i)=>{ f.style.setProperty('--w',(Math.max(.04,w[i]||1)*100)+'%'); f.classList.toggle('neg',(i===2&&R.margin<0)||(i===3&&R.credit<0)||(i===7&&!R.complied)); if(!reduced){ f.classList.remove('run'); void f.offsetWidth; f.classList.add('run'); } else f.style.width='var(--w)'; });
+  $('#scenBox3').innerHTML = `<div class="panel-head"><div><h3>Mechanism sensitivity</h3><p>Corporate P with each notified mechanism removed. Standard stays at ${fmt(R.TL)} L/100km (${fmt(R.T)} g/km).</p></div></div>
+    <div class="table-wrap"><table class="cmp"><thead><tr><th>Scenario</th><th class="r">P L/100km</th><th class="r">P g/km</th><th class="r">Margin g/km</th><th>Compliance</th></tr></thead>
+    <tbody>${R.scen.map(s=>`<tr><td style="color:var(--text);font-weight:400">${s.name}</td><td class="r num">${fmt(s.PL)}</td><td class="r num">${fmt(s.P)}</td><td class="r num ${s.margin>=0?'pos':'neg'}">${sign(s.margin)}</td><td><span class="status-dot ${s.complied?'ok':'bad'}">${s.complied?'Yes':'No'}</span></td></tr>`).join('')}</tbody></table></div>`;
+}
+
+/* ================= technology picker ================= */
+let techRow = null;
+function openTech(i, btn){
+  closeTech(); techRow=i;
+  const r=state3.rows[i], t=(r.tech||'NNNNNNNNNNNN').padEnd(12,'N').split('');
+  const pop=document.createElement('div'); pop.id='techPop'; pop.className='tech-pop'; pop.setAttribute('role','dialog'); pop.setAttribute('aria-label','Technologies');
+  pop.innerHTML = `<div class="tp-head"><b>Technologies, Table 1.3</b><span class="faint" id="tpCount"></span></div>
+    <div class="tp-list">${CAFE3.TECH.map((n,k)=>`<label><input type="checkbox" class="chk" data-t="${k}" ${t[k]==='Y'?'checked':''}><span>${n}</span></label>`).join('')}</div>
+    <div class="tp-foot"><button class="btn sm ghost" data-tp="all">Select all</button><button class="btn sm ghost" data-tp="none">Clear</button><button class="btn sm blue" data-tp="done">Done</button></div>`;
+  document.body.appendChild(pop);
+  const rc=btn.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight;
+  let left=Math.min(window.innerWidth-pw-12, Math.max(12, rc.left+rc.width/2-pw/2)), top=rc.bottom+8; if (top+ph>window.innerHeight-12) top=Math.max(12, rc.top-ph-8);
+  pop.style.left=left+'px'; pop.style.top=top+'px';
+  const upd=()=>{ const n=$$('[data-t]',pop).filter(c=>c.checked).length; $('#tpCount',pop).textContent=`${n} selected, ${Math.min(9,n)} g/km${n>9?' (capped)':''}`; };
+  const apply=()=>{ r.tech=$$('[data-t]',pop).map(c=>c.checked?'Y':'N').join(''); saveWork3(); updateResults3(); upd(); };
+  pop.addEventListener('change', apply);
+  pop.addEventListener('click', e=>{ const b=e.target.closest('[data-tp]'); if(!b) return; if(b.dataset.tp==='done'){ closeTech(); btn.focus(); return; } $$('[data-t]',pop).forEach(c=>c.checked=b.dataset.tp==='all'); apply(); });
+  upd(); $('[data-t]',pop).focus();
+}
+function closeTech(){ const p=$('#techPop'); if(p) p.remove(); techRow=null; }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeTech(); });
+document.addEventListener('mousedown', e=>{ const p=$('#techPop'); if(p && !p.contains(e.target) && !e.target.closest('.tech-btn')) closeTech(); });
+addEventListener('hashchange', closeTech);
+
+/* ================= CAFE III actions ================= */
+document.addEventListener('click', e=>{
+  const tb=e.target.closest('.tech-btn'); if (tb){ const i=+tb.dataset.tech; if (techRow===i) closeTech(); else openTech(i, tb); return; }
+  const b=e.target.closest('[data-act3]'); if(!b) return;
+  const a=b.dataset.act3, i=+b.dataset.i;
+  const arm=(fn)=>{ if (b.classList.contains('armed')) return fn(); const t=b.textContent; b.classList.add('armed'); b.textContent='Confirm'; setTimeout(()=>{ if(b.isConnected){ b.classList.remove('armed'); b.textContent=t; } },3000); };
+  switch(a){
+    case 'template': downloadTemplate3(); break;
+    case 'export': exportResults3(); break;
+    case 'addRows': { const k=Math.max(1,Math.min(500,parseInt($('#addN3')?.value)||10)), start=state3.rows.length; for(let q=0;q<k;q++) state3.rows.push(blankRow3()); saveWork3(); renderTable3(); updateResults3(); const ins=$(`#tableBox3 [data-i3="${start}"][data-k="brand"]`); if(ins){ ins.focus(); ins.scrollIntoView({block:'center'}); } toast(`Added ${k} row${k>1?'s':''}`); break; }
+    case 'trim': { const before=state3.rows.length; state3.rows=padRows3(filled3(state3.rows),1); saveWork3(); renderTable3(); updateResults3(); toast(`Removed ${before-state3.rows.length} empty row${before-state3.rows.length===1?'':'s'}`); break; }
+    case 'clear': arm(()=>{ state3.rows=padRows3([]); state3.docId=null; state3.docName=''; saveWork3(); render(); }); break;
+    case 'dup': closeTech(); state3.rows.splice(i+1,0,{...state3.rows[i], id:uid()}); saveWork3(); renderTable3(); updateResults3(); break;
+    case 'del': closeTech(); state3.rows.splice(i,1); if(!state3.rows.length) state3.rows.push(blankRow3()); saveWork3(); renderTable3(); updateResults3(); break;
+    case 'save': {
+      if (!filled3(state3.rows).length){ toast('Fill at least one line before saving.', true); break; }
+      const name = state3.docName || (state3.manufacturer? state3.manufacturer+' CAFE III' : 'CAFE III calculation')+' '+state3.year;
+      const d=upsertDoc3({id:state3.docId, name, source: state3.docId? (state.docs.find(x=>x.id===state3.docId)?.source||'Manual') : 'Manual', rows:filled3(state3.rows), manufacturer:state3.manufacturer});
+      state3.docId=d.id; state3.docName=d.name; saveWork3(); toast('Saved to documents: '+d.name); render(); break; }
+    case 'import2': if (projectFromCafe2(state.rows, state.manufacturer)) render(); break;
+    case 'project': if (projectFromCafe2(state.rows, state.manufacturer)) location.hash='#cafe3'; break;
   }
 });
 
