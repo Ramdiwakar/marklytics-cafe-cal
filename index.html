@@ -626,12 +626,11 @@ $('#fileIn').addEventListener('change', e=>{ handleFile(e.target.files[0]); e.ta
 const pickFile = ()=> $('#fileIn').click();
 
 /* ================= templates & export ================= */
-const TPL_HEAD = ['Brand','Model','Variant / Line','Fuel Type','pi CO2 (g/km)','Unladen Mass (kg)','Volume (units)','Regen Braking (Y/N)','Start-Stop (Y/N)','TPMS (Y/N)','6+ Speed Transmission (Y/N)','Other Certified Reduction (g/km)'];
+const TPL_HEAD = ['Brand','Model','Fuel Type','pi CO2 (g/km)','Unladen Mass (kg)','Volume (units)','Regen Braking (Y/N)','Start-Stop (Y/N)','TPMS (Y/N)','6+ Speed Transmission (Y/N)','Other Certified Reduction (g/km)'];
 const TPL_GUIDE = [
   ['Column','Required','Allowed values / notes'],
   ['Brand','Yes','Manufacturer or brand name'],
   ['Model','Yes','Model name'],
-  ['Variant / Line','No','Use one row per fuel line, e.g. "Creta - Diesel"'],
   ['Fuel Type','Yes','Petrol, Diesel, CNG, LPG, ICE / Other, Strong HEV, PHEV/REEV, BEV'],
   ['pi CO2 (g/km)','Yes, except BEV','Type-approved tailpipe CO2. BEV can be 0 or blank'],
   ['Unladen Mass (kg)','Yes','Unladen mass of the model'],
@@ -648,7 +647,7 @@ const TPL_GUIDE = [
 function downloadTemplate(){
   if (typeof XLSX==='undefined'){ toast('The Excel library did not load. Reload the page and try again.', true); return; }
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet([TPL_HEAD, ['EXAMPLE – delete this row','Creta','Creta - Petrol','Petrol',132,1240,25000,'N','Y','Y','Y',0]]);
+  const ws = XLSX.utils.aoa_to_sheet([TPL_HEAD, ['EXAMPLE – delete this row','Creta','Petrol',132,1240,25000,'N','Y','Y','Y',0]]);
   ws['!cols'] = TPL_HEAD.map(h=>({wch:Math.max(12,h.length+2)}));
   XLSX.utils.book_append_sheet(wb, ws, 'CAFE II Input');
   const g = XLSX.utils.aoa_to_sheet(TPL_GUIDE); g['!cols']=[{wch:34},{wch:16},{wch:80}];
@@ -671,7 +670,7 @@ function exportResults(){
   const s1 = XLSX.utils.aoa_to_sheet(sum); s1['!cols']=[{wch:52},{wch:30}];
   XLSX.utils.book_append_sheet(wb, s1, 'Summary');
   const lines = [[...TPL_HEAD,'vi Supercredit','Ni Effective Volume','Pi Official (g/km)','Status']];
-  state.rows.forEach((r,i)=>{ const l=R.lines[i]; if (l.blank) return; lines.push([r.brand,r.model,r.line,r.fuel,r.co2,r.mass,r.vol,r.regen,r.ss,r.tpms,r.six,r.other, l.ok?l.v:'', l.ok?l.N:'', l.ok?+l.pi.toFixed(3):'', l.ok?'OK':l.issues.join('; ')]); });
+  state.rows.forEach((r,i)=>{ const l=R.lines[i]; if (l.blank) return; lines.push([r.brand,r.model,r.fuel,r.co2,r.mass,r.vol,r.regen,r.ss,r.tpms,r.six,r.other, l.ok?l.v:'', l.ok?l.N:'', l.ok?+l.pi.toFixed(3):'', l.ok?'OK':l.issues.join('; ')]); });
   const s2 = XLSX.utils.aoa_to_sheet(lines); s2['!cols']=lines[0].map(h=>({wch:Math.max(10,String(h).length+2)}));
   XLSX.utils.book_append_sheet(wb, s2, 'Model lines');
   const sc = [['Scenario','Supercredits','Technology','P (g/km)','CAFCS (L/100km)','Credit / Debit (t/km)','Compliance','Potential fine (INR crore)','Target T (g/km)']];
@@ -907,13 +906,13 @@ function renderTable(){
       </div></div>
     <div id="issueBar"></div>
     <div class="table-wrap" style="max-height:min(70vh,52rem);overflow-y:auto"><table>
-      <thead><tr><th>#</th><th>Brand</th><th>Model</th><th>Variant / line</th><th>Fuel type</th><th class="r">pi CO₂ g/km</th><th class="r">Mass kg</th><th class="r">Volume</th>
+      <thead><tr><th>#</th><th>Brand</th><th>Model</th><th>Fuel type</th><th class="r">pi CO₂ g/km</th><th class="r">Mass kg</th><th class="r">Volume</th>
       <th class="c" title="Regenerative braking">Regen</th><th class="c">Start-stop</th><th class="c">TPMS</th><th class="c">6+ speed</th><th class="r">Other g/km</th>
       <th class="r">vi</th><th class="r">Ni effective</th><th class="r">Pi official</th><th></th></tr></thead>
       <tbody>${state.rows.map((r,i)=>`
         <tr data-row="${i}">
           <td class="faint num flag">${String(i+1).padStart(2,'0')}</td>
-          <td>${cell(i,'brand','text','w-m','Brand')}</td><td>${cell(i,'model','text','w-m','Model')}</td><td>${cell(i,'line','text','w-l','Variant')}</td>
+          <td>${cell(i,'brand','text','w-m','Brand')}</td><td>${cell(i,'model','text','w-l','Model')}</td>
           <td><select class="grid-in w-m" data-i="${i}" data-k="fuel" aria-label="Fuel type row ${i+1}">${(FUELS.includes(r.fuel)?'':`<option selected>${esc(r.fuel)}</option>`)+FUELS.map(f=>`<option ${f===r.fuel?'selected':''}>${f}</option>`).join('')}</select></td>
           <td>${cell(i,'co2','number','w-s','0')}</td><td>${cell(i,'mass','number','w-s','0')}</td><td>${cell(i,'vol','number','w-m','0')}</td>
           ${['regen','ss','tpms','six'].map(k=>`<td class="c"><input type="checkbox" class="chk" data-i="${i}" data-k="${k}" ${r[k]==='Y'?'checked':''} aria-label="${k} row ${i+1}"></td>`).join('')}
@@ -1020,7 +1019,7 @@ function renderTemplates(v){
       <div class="panel-head"><div><h3>CAFE II input template</h3><p>FY2025-26, one sheet for data and one guide sheet.</p></div><button class="btn primary" data-act="template">${ICON.dl}Download template</button></div>
       <div class="panel-pad"><div class="code-list">
         <div><span>Column</span><span>Required</span><span>Allowed values</span></div>
-        ${TPL_GUIDE.slice(1,13).map(r=>`<div><b>${esc(r[0])}</b><span class="muted">${esc(r[1])}</span><span class="muted">${esc(r[2])}</span></div>`).join('')}
+        ${TPL_GUIDE.slice(1,12).map(r=>`<div><b>${esc(r[0])}</b><span class="muted">${esc(r[1])}</span><span class="muted">${esc(r[2])}</span></div>`).join('')}
       </div></div>
     </div>
     <div class="two">
@@ -1107,7 +1106,7 @@ function pgBody(){
 function pgModelsTable(){
   const t=$('#pgModels'); if(!t) return;
   t.innerHTML = `<thead><tr><th>Model</th><th>Fuel</th><th class="r">pi CO₂</th><th class="r">Baseline</th><th class="r">Scenario</th><th class="r">Pin volume</th></tr></thead><tbody>
-    ${pg.base.map((r,i)=>`<tr><td>${esc(r.line||r.model||'Line '+(i+1))}</td><td><span class="swatch" style="background:${FUEL_COLORS[r.fuel]}"></span>${r.fuel}</td><td class="r num">${fmt(r.co2,0)}</td><td class="r num">${fint(r.vol)}</td><td class="r num calc" data-sc="${i}"></td>
+    ${pg.base.map((r,i)=>`<tr><td>${esc([r.brand,r.model].filter(Boolean).join(' ')||'Line '+(i+1))}</td><td><span class="swatch" style="background:${FUEL_COLORS[r.fuel]}"></span>${r.fuel}</td><td class="r num">${fmt(r.co2,0)}</td><td class="r num">${fint(r.vol)}</td><td class="r num calc" data-sc="${i}"></td>
       <td class="r"><input class="grid-in n w-m" type="number" min="0" step="1" data-ov="${i}" value="${pg.ov[i]??''}" placeholder="–" aria-label="Pin volume for ${esc(r.model)}"></td></tr>`).join('')}</tbody>`;
   $$('[data-ov]',t).forEach(el=>el.addEventListener('input',()=>{ const n=num(el.value); if(n==null) delete pg.ov[el.dataset.ov]; else pg.ov[el.dataset.ov]=n; pgUpdate(); }));
 }
