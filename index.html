@@ -170,6 +170,29 @@ select.input option,select.grid-in option{background:var(--panel-solid);color:va
 .ring{width:100%;max-width:17rem;height:auto;display:block;overflow:visible}
 .ring text{font-family:var(--head)}
 .ring .spin{transform-origin:150px 150px;animation:spin 60s linear infinite}
+.ring{transition:transform .45s cubic-bezier(.2,.9,.25,1.35), filter .35s;cursor:pointer}
+.ring:hover{transform:scale(1.07);filter:drop-shadow(0 0 22px rgba(61,123,255,.45))}
+.ring .center{transform-origin:150px 160px;transition:transform .4s cubic-bezier(.2,.9,.25,1.4)}
+.ring:hover .center{transform:scale(1.12)}
+.ring .halo{transition:r .3s, opacity .3s}
+.ring:hover .halo{r:24;opacity:.32}
+.ring:hover .spin{animation-duration:8s}
+.ruler .mk{cursor:pointer}
+.ruler .knob{transition:transform .35s cubic-bezier(.2,.9,.25,1.5)}
+.ruler .mk:hover .knob{transform:scale(1.7)}
+.ruler .mk .lbl{transition:font-size .25s}
+.ruler .mk:hover .lbl{font-size:16px}
+.metric{position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.2,.9,.25,1.3), background .25s, box-shadow .25s}
+.metric:hover{transform:scale(1.045);z-index:2;background:linear-gradient(180deg,rgba(61,123,255,.14),rgba(61,123,255,.03));box-shadow:0 0 0 1px var(--line-strong),0 14px 34px -14px rgba(61,123,255,.55)}
+.metric:hover .v{text-shadow:0 0 18px rgba(61,123,255,.55)}
+.metric .flow{position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,transparent,var(--cyan) 40%,var(--blue));box-shadow:0 0 10px var(--cyan);border-radius:2px}
+.metric .flow.neg{background:linear-gradient(90deg,transparent,var(--coral) 40%,var(--red));box-shadow:0 0 10px var(--red)}
+.metric .flow.run{animation:flowIn 1.1s cubic-bezier(.25,.8,.25,1) forwards}
+.metric:nth-child(2) .flow.run{animation-delay:.08s}.metric:nth-child(3) .flow.run{animation-delay:.16s}.metric:nth-child(4) .flow.run{animation-delay:.24s}
+.metric:nth-child(5) .flow.run{animation-delay:.32s}.metric:nth-child(6) .flow.run{animation-delay:.4s}.metric:nth-child(7) .flow.run{animation-delay:.48s}.metric:nth-child(8) .flow.run{animation-delay:.56s}
+@keyframes flowIn{from{width:0;opacity:1}to{width:var(--w);opacity:1}}
+.hero-stats>div{transition:transform .3s cubic-bezier(.2,.9,.25,1.3)}
+.hero-stats>div:hover{transform:scale(1.08)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ---------- table ---------- */
@@ -676,16 +699,32 @@ function rulerSVG(el, P, T, P2){
     <rect x="${tx}" y="${base-4}" width="${Math.max(0,x1-tx)}" height="8" fill="var(--red-tint)"/>
     <line x1="${x0}" x2="${x1}" y1="${base}" y2="${base}" stroke="var(--line-strong)"/>
     ${ticks}
-    <line x1="${tx}" x2="${tx}" y1="${base-56}" y2="${base+14}" stroke="var(--red)" stroke-width="2" stroke-dasharray="5 4"/>
+    <defs><linearGradient id="beamG" gradientUnits="userSpaceOnUse" x1="${x0}" y1="0" x2="${Math.max(px,x0+1)}" y2="0"><stop offset="0" style="stop-color:var(--cyan);stop-opacity:0"/><stop offset=".55" style="stop-color:var(--cyan)"/><stop offset="1" style="stop-color:${ok?'var(--blue)':'var(--red)'}"/></linearGradient>
+      <filter id="beamGlow" filterUnits="userSpaceOnUse" x="0" y="${base-20}" width="${Wd}" height="40"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <line class="beam" x1="${x0}" x2="${px}" y1="${base}" y2="${base}" stroke="url(#beamG)" stroke-width="3.5" stroke-linecap="round" filter="url(#beamGlow)"/>
+    <circle class="comet" cx="${x0}" cy="${base}" r="4" fill="#fff" filter="url(#beamGlow)" opacity="0"/>
+    <line class="tline" x1="${tx}" x2="${tx}" y1="${base-56}" y2="${base+14}" stroke="var(--red)" stroke-width="2" stroke-dasharray="5 4"/>
     <text class="lbl" x="${tx}" y="${base-62}" text-anchor="${anchor(tx)}" style="fill:var(--red)">Target T ${fmt(T)}</text>
     <g class="mk" data-x="${px}">
       <line x1="0" x2="0" y1="${base-34}" y2="${base}" stroke="var(--blue)" stroke-width="2"/>
-      <circle cx="0" cy="${base}" r="7.5" fill="var(--blue)"/><circle cx="0" cy="${base}" r="13" fill="none" stroke="var(--blue)" stroke-opacity=".25" stroke-width="5"/>
+      <g class="knob" style="transform-origin:0px ${base}px"><circle cx="0" cy="${base}" r="7.5" fill="var(--blue)"/><circle cx="0" cy="${base}" r="13" fill="none" stroke="var(--blue)" stroke-opacity=".3" stroke-width="5"/></g>
+      <rect x="-16" y="${base-18}" width="32" height="36" fill="transparent"/>
       <text class="lbl" x="0" y="${base-40}" text-anchor="${anchor(px)}" style="fill:var(--blue)">${P2!=null?'Baseline':'Performance'} P ${fmt(P)}</text>
     </g>
     ${p2}
     <text x="${x0}" y="${H-4}">g CO₂/km · ${ok?'left of the red line is compliant':'performance is above target'}</text>
   </svg>`;
+  // flowing beam from the scale start that stops at P
+  const first = el.dataset.mk==null, prevPx = first? x0 : +el.dataset.mk;
+  if (!reduced && (first || Math.abs(prevPx-px)>0.5)){
+    const beam=$('.beam',el), comet=$('.comet',el), dur = first? 1100 : 450;
+    const fromLen = Math.max(0, prevPx-x0), toLen = Math.max(0.01, px-x0);
+    beam.setAttribute('stroke-dasharray', `${toLen} 9999`);
+    beam.animate([{strokeDasharray:`${fromLen} 9999`},{strokeDasharray:`${toLen} 9999`}],{duration:dur,easing:'cubic-bezier(.25,.8,.25,1)'});
+    comet.animate([{cx:prevPx, opacity:first?0:.9},{opacity:1, offset:.2},{cx:px, opacity:.95, offset:.92},{cx:px, opacity:0}],{duration:dur+250,easing:'cubic-bezier(.25,.8,.25,1)'});
+    if (first){ const tl=$('.tline',el); tl.animate([{strokeDashoffset:80, opacity:0},{strokeDashoffset:0, opacity:1}],{duration:700,easing:'ease-out'});
+      const kn=$('.mk .knob',el); kn && kn.animate([{transform:'scale(0)'},{transform:'scale(1.5)',offset:.75},{transform:'scale(1)'}],{duration:450,delay:dur-120,fill:'backwards',easing:'ease-out'}); }
+  }
   ['mk','mk2'].forEach(c=>{
     const g=$('.'+c, el); if(!g) return;
     const x=+g.dataset.x, prev = el.dataset[c]; g.setAttribute('transform',`translate(${x},0)`);
@@ -728,20 +767,26 @@ function ringSVG(el, P, T){
   const len = Math.PI*2*r*(sweep/360)*frac;
   el.innerHTML = `<svg class="ring" viewBox="0 0 300 300" role="img" aria-label="Performance ${fmt(P)} versus target ${fmt(T)} g/km">
     <defs><filter id="glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <linearGradient id="rg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="var(--cyan)"/><stop offset="1" stop-color="${ok?'var(--blue)':'var(--red)'}"/></linearGradient></defs>
+    <linearGradient id="rg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" style="stop-color:var(--cyan)"/><stop offset="1" style="stop-color:${ok?'var(--blue)':'var(--red)'}"/></linearGradient></defs>
     <g class="spin"><circle cx="150" cy="150" r="146" fill="none" stroke="var(--line-strong)" stroke-dasharray="2 9"/></g>
     ${ticks}
     <path d="${arc(0,tfrac)}" fill="none" stroke="var(--green-tint)" stroke-width="14" stroke-linecap="butt"/>
     <path d="${arc(tfrac,1)}" fill="none" stroke="var(--red-tint)" stroke-width="14"/>
     <path class="val" d="${arc(0,Math.max(frac,0.0001))}" fill="none" stroke="url(#rg)" stroke-width="14" stroke-linecap="round" filter="url(#glw)" stroke-dasharray="${len} 2000" stroke-dashoffset="${len}"/>
     <line x1="${tx0}" y1="${ty0}" x2="${tx1}" y2="${ty1}" stroke="var(--red)" stroke-width="3"/>
+    <g class="rknob"><circle class="halo" r="15" fill="${col}" opacity=".18"/><circle r="8.5" fill="var(--panel-solid)" stroke="${col}" stroke-width="3.5"/><circle r="3" fill="${col}"/></g>
     <circle cx="150" cy="150" r="78" fill="none" stroke="var(--line)"/>
-    <text x="150" y="122" text-anchor="middle" style="font-size:11px;letter-spacing:2px;fill:var(--faint);font-family:var(--body);font-weight:700">PERFORMANCE</text>
+    <g class="center"><text x="150" y="122" text-anchor="middle" style="font-size:11px;letter-spacing:2px;fill:var(--faint);font-family:var(--body);font-weight:700">PERFORMANCE</text>
     <text x="150" y="160" text-anchor="middle" style="font-size:38px;font-weight:700;fill:var(--text)" class="num">${fmt(P,1)}</text>
     <text x="150" y="180" text-anchor="middle" style="font-size:12px;fill:var(--faint);font-family:var(--body)">g CO₂/km</text>
-    <text x="150" y="206" text-anchor="middle" style="font-size:13px;font-weight:700;fill:var(--red)">Target ${fmt(T,1)}</text>
+    <text x="150" y="206" text-anchor="middle" style="font-size:13px;font-weight:700;fill:var(--red)">Target ${fmt(T,1)}</text></g>
   </svg>`;
-  const v=$('.val',el); if (v){ if (reduced) v.setAttribute('stroke-dashoffset','0'); else v.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:900,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'}); }
+  const v=$('.val',el), kn=$('.rknob',el), place=f=>{ const [x,y]=pt(Math.max(f,0.0001)); kn.setAttribute('transform',`translate(${x} ${y})`); };
+  if (reduced){ v.setAttribute('stroke-dashoffset','0'); place(frac); return; }
+  v.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:1000,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'});
+  const t0=performance.now(), ease=k=>{ /* matches cubic-bezier(.2,.7,.2,1) closely */ return 1-Math.pow(1-k,3.2); };
+  const step=t=>{ const k=Math.min(1,(t-t0)/1000); place(frac*ease(k)); if(k<1) requestAnimationFrame(step); else kn.animate([{transform:kn.getAttribute('transform')+' scale(1)'},{transform:kn.getAttribute('transform')+' scale(1.45)'},{transform:kn.getAttribute('transform')+' scale(1)'}],{duration:380,easing:'ease-out'}); };
+  place(0); requestAnimationFrame(step);
 }
 const MIN_ROWS = 10;
 function padRows(rows, n=MIN_ROWS){ while(rows.length<n) rows.push(blankRow()); return rows; }
@@ -813,7 +858,7 @@ function renderCafe2(v){
     <div class="panel doc-bar">
       <label class="field"><span>Manufacturer</span><input class="input" id="mfIn" value="${esc(state.manufacturer)}" placeholder="e.g. Hyundai Motor India" style="min-width:15rem"></label>
       <div class="field"><span>Document</span><span style="padding:.5rem 0;min-width:9rem">${state.docName? esc(state.docName) : '<span class="faint">Not saved yet</span>'}</span></div>
-      <div class="drop" id="dropZone">Drop an Excel file here. The CAFE II template and your existing calculator workbooks are both recognised.</div>
+      <div class="drop" id="dropZone">Drop an Excel or CSV file here</div>
       <div class="actions">
         <select class="input" id="sampleSel" aria-label="Load a sample fleet"><option value="">Load sample fleet…</option>${SAMPLES.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select>
         <button class="btn" data-act="saveDoc">${ICON.save}Save to documents</button>
@@ -909,14 +954,14 @@ function updateResults(){
     box.innerHTML = `<div class="ring-col" id="ringBox"></div>
     <div class="result-main" id="rmain"><span class="tag">Compliance status</span><div class="verdict" style="margin-top:.6rem"><span id="verdict"></span></div><p class="verdict-line" id="vline" style="margin-top:.6rem"></p><div id="ruler"></div></div>
     <div class="metrics">
-      <div class="metric"><div class="k">P, performance</div><div class="v"><span data-m="P"></span><span class="u">g/km</span></div><div class="s">CAFCS <span data-m="PL"></span> L/100km</div></div>
-      <div class="metric"><div class="k">T, target</div><div class="v"><span data-m="T"></span><span class="u">g/km</span></div><div class="s">ACAFC <span data-m="TL"></span> L/100km</div></div>
-      <div class="metric"><div class="k">Margin T − P</div><div class="v" id="mMargin"></div><div class="s">g CO₂/km</div></div>
-      <div class="metric"><div class="k">Credit / debit</div><div class="v" id="mCredit"></div><div class="s">t/km, (T − P) × Σni ÷ 10⁶</div></div>
-      <div class="metric"><div class="k">Weighted mass W</div><div class="v"><span data-m="W"></span><span class="u">kg</span></div><div class="s">Sales-weighted unladen mass</div></div>
-      <div class="metric"><div class="k">Volume</div><div class="v" id="mJ"></div><div class="s">Effective <span id="mL"></span></div></div>
-      <div class="metric"><div class="k">Penalty exposure</div><div class="v"><span id="mPen"></span><span class="u">₹ cr</span></div><div class="s" id="mTier"></div></div>
-      <div class="metric"><div class="k">Lines counted</div><div class="v" id="mCount"></div><div class="s" id="mInv"></div></div>
+      <div class="metric"><i class="flow"></i><div class="k">P, performance</div><div class="v"><span data-m="P"></span><span class="u">g/km</span></div><div class="s">CAFCS <span data-m="PL"></span> L/100km</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">T, target</div><div class="v"><span data-m="T"></span><span class="u">g/km</span></div><div class="s">ACAFC <span data-m="TL"></span> L/100km</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Margin T − P</div><div class="v" id="mMargin"></div><div class="s">g CO₂/km</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Credit / debit</div><div class="v" id="mCredit"></div><div class="s">t/km, (T − P) × Σni ÷ 10⁶</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Weighted mass W</div><div class="v"><span data-m="W"></span><span class="u">kg</span></div><div class="s">Sales-weighted unladen mass</div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Volume</div><div class="v" id="mJ"></div><div class="s">Effective <span id="mL"></span></div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Penalty exposure</div><div class="v"><span id="mPen"></span><span class="u">₹ cr</span></div><div class="s" id="mTier"></div></div>
+      <div class="metric"><i class="flow"></i><div class="k">Lines counted</div><div class="v" id="mCount"></div><div class="s" id="mInv"></div></div>
     </div>`;
   }
   const key = R.P.toFixed(3)+'|'+R.T.toFixed(3);
@@ -925,6 +970,8 @@ function updateResults(){
   $('#vline').textContent = R.complied? `Corporate average is ${fmt(R.margin)} g/km below the target.` : `Corporate average exceeds the target by ${fmt(-R.margin)} g/km (${fmt(R.gap)} L/100km).`;
   rulerSVG($('#ruler'), R.P, R.T);
   ['P','T','PL','TL','W'].forEach(k=>tween($(`[data-m=${k}]`), R[k], k==='W'?1:3));
+  const mx=Math.max(R.P,R.T), widths=[R.P/mx, R.T/mx, Math.min(1,Math.abs(R.margin)/(R.T*.1)), Math.min(1,Math.abs(R.credit)/Math.max(1,Math.abs(R.credit))), R.W/2500, 1, R.penaltyCr>0?1:.04, R.count/Math.max(1,R.filled)];
+  $$('#resultBox .metric .flow').forEach((f,i)=>{ f.style.setProperty('--w', (Math.max(.04,widths[i]||1)*100)+'%'); f.classList.toggle('neg', (i===2&&R.margin<0)||(i===3&&R.credit<0)||(i===6&&R.penaltyCr>0)); if(!reduced){ f.classList.remove('run'); void f.offsetWidth; f.classList.add('run'); } else f.style.width='var(--w)'; });
   $('#mMargin').innerHTML = `<span class="${R.margin>=0?'pos':'neg'}">${sign(R.margin)}</span>`;
   $('#mCredit').innerHTML = `<span class="${R.credit>=0?'pos':'neg'}">${sign(R.credit)}</span>`;
   $('#mJ').textContent = fint(R.J); $('#mL').textContent = fint(R.L);
